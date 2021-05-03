@@ -1,8 +1,8 @@
 {
-  "name": "@jkroepke/lens-certificate-info",
+  "name": "lens-certificate-info",
   "version": "0.0.1",
   "author": "Jan-Otto Kröpke <mail@jkroepke.de> (https://github.com/jkroepke)",
-  "description": "Lens extension Hello World sample",
+  "description": "Lens extension get infos from certificates inside secrets.",
   "repository": {
     "type": "git",
     "url": "https://github.com/jkroepke/lens-extension-certificate-info.git"
