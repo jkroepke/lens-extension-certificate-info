@@ -44,14 +44,16 @@ export class SecretDetails extends React.Component<Component.KubeObjectDetailsPr
             <Component.DrawerTitle title={ "Certificate Info - " + key } />
             <Component.DrawerItem name="CN">{cert.subject.CN}</Component.DrawerItem>
             <Component.DrawerItem name="SAN">{this.formatSAN(cert.subjectaltname)}</Component.DrawerItem>
-            <Component.DrawerItem name="From Date">{cert.valid_from}</Component.DrawerItem>
-            <Component.DrawerItem name="To Date">{this.formatDate(cert.valid_to)}</Component.DrawerItem>
+            <Component.DrawerItem name="Issuer">{this.formatSAN(cert.issuer.CN)}</Component.DrawerItem>
+            <Component.DrawerItem name="Not before">{cert.valid_from}</Component.DrawerItem>
+            <Component.DrawerItem name="Expires">{this.formatDate(cert.valid_to)}</Component.DrawerItem>
           </div>
         )
       } catch (e) {
         console.error(e)
       }
     }
+
     return (
       <div>
         {certificates}
