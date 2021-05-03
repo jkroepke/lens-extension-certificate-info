@@ -2,6 +2,7 @@
   "name": "lens-certificate-info",
   "version": "0.0.1",
   "author": "Jan-Otto Kröpke <mail@jkroepke.de> (https://github.com/jkroepke)",
+  "publisher": "jkroepke",
   "description": "Lens extension get infos from certificates inside secrets.",
   "repository": {
     "type": "git",
@@ -13,6 +14,9 @@
     "start": "webpack --watch",
     "build": "npm run clean && webpack",
     "clean": "rm -rf ./dist"
+  },
+  "engines": {
+    "lens": "^4.0.0"
   },
   "dependencies": {
   },
