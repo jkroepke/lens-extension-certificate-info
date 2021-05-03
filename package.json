@@ -1,0 +1,38 @@
+{
+  "name": "@jkroepke/lens-certificate-info",
+  "version": "0.0.1",
+  "author": "Jan-Otto Kröpke <mail@jkroepke.de> (https://github.com/jkroepke)",
+  "description": "Lens extension Hello World sample",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jkroepke/lens-extension-certificate-info.git"
+  },
+  "main": "dist/main.js",
+  "renderer": "dist/renderer.js",
+  "scripts": {
+    "start": "webpack --watch",
+    "build": "npm run clean && webpack",
+    "clean": "rm -rf ./dist"
+  },
+  "dependencies": {
+  },
+  "devDependencies": {
+    "@k8slens/extensions": "^4.2.3",
+    "@types/node": "^15.0.1",
+    "@types/react": "^17.0.4",
+    "ts-loader": "^9.1.1",
+    "typescript": "^4.2.4",
+    "webpack": "^5.36.2",
+    "webpack-cli": "^4.6.0"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/jkroepke/lens-extension-certificate-info",
+  "bugs": {
+    "url": "https://github.com/jkroepke/lens-extension-certificate-info/issues"
+  },
+  "keywords": [
+    "extension",
+    "k8slens",
+    "lens"
+  ]
+}
