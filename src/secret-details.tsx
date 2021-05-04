@@ -63,7 +63,7 @@ export class SecretDetails extends React.Component<
               {this.formatSAN(cert.subjectaltname)}
             </Component.DrawerItem>
             <Component.DrawerItem name="Issuer">
-              {this.formatSAN(cert.issuer.CN)}
+              {cert.issuer.CN}
             </Component.DrawerItem>
             <Component.DrawerItem name="Not before">
               {cert.valid_from}
