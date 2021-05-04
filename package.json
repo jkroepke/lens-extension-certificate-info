@@ -13,9 +13,12 @@
   "scripts": {
     "start": "webpack --watch",
     "build": "npm run clean && webpack",
-    "clean": "rm -rf ./dist",
+    "clean": "rimraf ./dist",
     "semantic-release": "semantic-release"
   },
+  "files": [
+    "dist/"
+  ],
   "engines": {
     "lens": "^4.0.0"
   },
@@ -29,6 +32,7 @@
     "husky": "^6.0.0",
     "lint-staged": "^10.5.4",
     "prettier": "2.2.1",
+    "rimraf": "^3.0.2",
     "semantic-release": "^17.4.2",
     "ts-loader": "^9.1.1",
     "typescript": "^4.2.4",
