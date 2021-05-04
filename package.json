@@ -26,6 +26,9 @@
     "@semantic-release/git": "^9.0.0",
     "@types/node": "^15.0.1",
     "@types/react": "^17.0.4",
+    "husky": "^6.0.0",
+    "lint-staged": "^10.5.4",
+    "prettier": "2.2.1",
     "semantic-release": "^17.4.2",
     "ts-loader": "^9.1.1",
     "typescript": "^4.2.4",
@@ -42,17 +45,22 @@
     "k8slens",
     "lens"
   ],
-
   "release": {
-    "branches": ["main"],
+    "branches": [
+      "main"
+    ],
     "plugins": [
       "@semantic-release/commit-analyzer",
       "@semantic-release/release-notes-generator",
       "@semantic-release/npm",
-      ["@semantic-release/github", {
-
-      }],
+      [
+        "@semantic-release/github",
+        {}
+      ],
       "@semantic-release/git"
     ]
+  },
+  "lint-staged": {
+    "**/*": "prettier --write --ignore-unknown"
   }
 }

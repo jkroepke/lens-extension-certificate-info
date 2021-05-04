@@ -15,12 +15,6 @@
     "experimentalDecorators": true,
     "jsx": "react"
   },
-  "include": [
-    "./*.ts",
-    "./*.tsx"
-  ],
-  "exclude": [
-    "node_modules",
-    "*.js"
-  ]
+  "include": ["./*.ts", "./*.tsx"],
+  "exclude": ["node_modules", "*.js"]
 }
