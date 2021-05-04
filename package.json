@@ -63,7 +63,7 @@
         {
           "assets": [
             {
-              "path": "lens-certificate-info.*.tgz",
+              "path": "*.tgz",
               "name": "lens-certificate-info.tgz"
             }
           ]
