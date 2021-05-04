@@ -6,4 +6,4 @@ See expire date from certificates inside kubernetes secrets.
 
 ### Direct link
 
-(lens://app/extensions/install/lens-certificate-info)[lens://app/extensions/install/lens-certificate-info]
+[lens://app/extensions/install/lens-certificate-info](lens://app/extensions/install/lens-certificate-info)
