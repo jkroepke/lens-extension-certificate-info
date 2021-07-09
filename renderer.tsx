@@ -1,18 +1,19 @@
-import { LensRendererExtension, Component, K8sApi } from "@k8slens/extensions";
+import { Renderer } from "@k8slens/extensions";
 import { SecretDetails } from "./src/secret-details";
 import React from "react";
 
-export default class CertificateInfoExtension extends LensRendererExtension {
+
+export default class CertificateInfoExtension extends Renderer.LensExtension {
   kubeObjectDetailItems = [
     {
       kind: "Secret",
       apiVersions: ["v1"],
       priority: 10,
       components: {
-        Details: (props: Component.KubeObjectDetailsProps<K8sApi.Secret>) => (
+        Details: (props: Renderer.Component.KubeObjectDetailsProps<Renderer.K8sApi.Secret>) => (
           <SecretDetails {...props} />
-        ),
-      },
-    },
+        )
+      }
+    }
   ];
 }

@@ -1,3 +1,4 @@
-import { LensMainExtension } from "@k8slens/extensions";
+import { Main } from "@k8slens/extensions";
 
-export default class CertificateInfoMainExtension extends LensMainExtension {}
+
+export default class CertificateInfoMainExtension extends Main.LensExtension {}
