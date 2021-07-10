@@ -1,6 +1,5 @@
 ## [1.1.2](https://github.com/jkroepke/lens-extension-certificate-info/compare/v1.1.1...v1.1.2) (2021-05-04)
 
-
 ### Bug Fixes
 
 * tarball on gh actions ([6eaef4b](https://github.com/jkroepke/lens-extension-certificate-info/commit/6eaef4ba601ee9203e122759b392bfa0ee396fb8))
