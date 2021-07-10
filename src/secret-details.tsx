@@ -1,11 +1,9 @@
-import { Component, K8sApi } from "@k8slens/extensions";
+import { Renderer } from "@k8slens/extensions";
 import React from "react";
 import tls, { PeerCertificate } from "tls";
 import net from "net";
 
-export class SecretDetails extends React.Component<
-  Component.KubeObjectDetailsProps<K8sApi.Secret>
-> {
+export class SecretDetails extends React.Component<Renderer.Component.KubeObjectDetailsProps<Renderer.K8sApi.Secret>> {
   formatDate(dateString: string) {
     const date = new Date(dateString);
     const now = new Date();
@@ -45,32 +43,32 @@ export class SecretDetails extends React.Component<
 
       try {
         let secureContext = tls.createSecureContext({
-          cert: certificateString,
+          cert: certificateString
         });
 
         let secureSocket = new tls.TLSSocket(new net.Socket(), {
-          secureContext,
+          secureContext
         });
         let cert: PeerCertificate = secureSocket.getCertificate() as PeerCertificate;
 
         certificates.push(
           <div>
-            <Component.DrawerTitle title={"Certificate Info - " + key} />
-            <Component.DrawerItem name="CN">
+            <Renderer.Component.DrawerTitle title={"Certificate Info - " + key} />
+            <Renderer.Component.DrawerItem name="CN">
               {cert.subject.CN}
-            </Component.DrawerItem>
-            <Component.DrawerItem name="SAN">
+            </Renderer.Component.DrawerItem>
+            <Renderer.Component.DrawerItem name="SAN">
               {this.formatSAN(cert.subjectaltname)}
-            </Component.DrawerItem>
-            <Component.DrawerItem name="Issuer">
+            </Renderer.Component.DrawerItem>
+            <Renderer.Component.DrawerItem name="Issuer">
               {cert.issuer.CN}
-            </Component.DrawerItem>
-            <Component.DrawerItem name="Not before">
+            </Renderer.Component.DrawerItem>
+            <Renderer.Component.DrawerItem name="Not before">
               {cert.valid_from}
-            </Component.DrawerItem>
-            <Component.DrawerItem name="Expires">
+            </Renderer.Component.DrawerItem>
+            <Renderer.Component.DrawerItem name="Expires">
               {this.formatDate(cert.valid_to)}
-            </Component.DrawerItem>
+            </Renderer.Component.DrawerItem>
           </div>
         );
       } catch (e) {

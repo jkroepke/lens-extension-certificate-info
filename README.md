@@ -5,8 +5,6 @@
 
 # lens-extension-certificate-info
 
-**Compatible with Lens 4 only.**
-
 See expire date from certificates inside kubernetes secrets.
 
 ![Certificate details in secrets overview](docs/secrets.png)
