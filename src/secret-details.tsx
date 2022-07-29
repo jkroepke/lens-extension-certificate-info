@@ -53,7 +53,7 @@ export class SecretDetails extends React.Component<Renderer.Component.KubeObject
 
         certificates.push(
           <div>
-            <Renderer.Component.DrawerTitle title={"Certificate Info - " + key} />
+            <Renderer.Component.DrawerTitle>Certificate Info - {key}</Renderer.Component.DrawerTitle>
             <Renderer.Component.DrawerItem name="CN">
               {cert.subject.CN}
             </Renderer.Component.DrawerItem>
