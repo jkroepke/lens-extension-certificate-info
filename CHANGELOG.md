@@ -1,3 +1,15 @@
+# [3.0.0](https://github.com/jkroepke/lens-extension-certificate-info/compare/v2.0.0...v3.0.0) (2022-07-29)
+
+
+### Features
+
+* bump lens to v6 ([d254c6e](https://github.com/jkroepke/lens-extension-certificate-info/commit/d254c6ef7c9e43b91d74ed32bfef486de89e8693))
+
+
+### BREAKING CHANGES
+
+* drop Lens 5
+
 # [2.0.0](https://github.com/jkroepke/lens-extension-certificate-info/compare/v1.1.2...v2.0.0) (2021-07-10)
 
 
