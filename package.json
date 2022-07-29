@@ -1,6 +1,6 @@
 {
   "name": "lens-certificate-info",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "author": "Jan-Otto Kröpke <mail@jkroepke.de> (https://github.com/jkroepke)",
   "publisher": "jkroepke",
   "description": "Lens extension get infos from certificates inside secrets.",

@@ -1,3 +1,10 @@
+## [3.0.1](https://github.com/jkroepke/lens-extension-certificate-info/compare/v3.0.0...v3.0.1) (2022-07-29)
+
+
+### Bug Fixes
+
+* Section title ([0727134](https://github.com/jkroepke/lens-extension-certificate-info/commit/07271342f9cf28278257315f2ad8cf5536abfc9b))
+
 # [3.0.0](https://github.com/jkroepke/lens-extension-certificate-info/compare/v2.0.0...v3.0.0) (2022-07-29)
 
 
