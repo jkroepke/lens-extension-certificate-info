@@ -38,8 +38,14 @@ export class SecretDetails extends React.Component<Renderer.Component.KubeObject
         "base64"
       ).toString("ascii");
 
-      if (!certificateString.startsWith("-----BEGIN CERTIFICATE-----"))
+      const PEM_CERTIFICATE_HEADER = "-----BEGIN CERTIFICATE-----";
+      const PEM_CERTIFICATE_FOOTER = "-----END CERTIFICATE-----";
+
+      if (!certificateString.includes(PEM_CERTIFICATE_HEADER) ||
+        !certificateString.includes(PEM_CERTIFICATE_FOOTER)) {
+        // The certificate string does not have the correct PEM format
         continue;
+      }
 
       try {
         let secureContext = tls.createSecureContext({
