@@ -33,7 +33,7 @@ export class SecretDetails extends React.Component<Renderer.Component.KubeObject
     const certificates: any[] = [];
 
     for (const key of secretKeys) {
-      const certificateString = Buffer.from(
+      const secretString = Buffer.from(
         this.props.object.data[key],
         "base64"
       ).toString("ascii");
@@ -41,44 +41,50 @@ export class SecretDetails extends React.Component<Renderer.Component.KubeObject
       const PEM_CERTIFICATE_HEADER = "-----BEGIN CERTIFICATE-----";
       const PEM_CERTIFICATE_FOOTER = "-----END CERTIFICATE-----";
 
-      if (!certificateString.includes(PEM_CERTIFICATE_HEADER) ||
-        !certificateString.includes(PEM_CERTIFICATE_FOOTER)) {
-        // The certificate string does not have the correct PEM format
-        continue;
-      }
+      const certificateStrings = secretString.split(PEM_CERTIFICATE_FOOTER);
 
-      try {
-        let secureContext = tls.createSecureContext({
-          cert: certificateString
-        });
+      for (let i = 0; i < certificateStrings.length; i++) {
+        const certificateString = certificateStrings[i] + PEM_CERTIFICATE_FOOTER;
 
-        let secureSocket = new tls.TLSSocket(new net.Socket(), {
-          secureContext
-        });
-        let cert: PeerCertificate = secureSocket.getCertificate() as PeerCertificate;
+        if (!certificateString.includes(PEM_CERTIFICATE_HEADER) ||
+          !certificateString.includes(PEM_CERTIFICATE_FOOTER)) {
+          // The certificate string does not have the correct PEM format
+          continue;
+        }
 
-        certificates.push(
-          <div>
-            <Renderer.Component.DrawerTitle>Certificate Info - {key}</Renderer.Component.DrawerTitle>
-            <Renderer.Component.DrawerItem name="CN">
-              {cert.subject.CN}
-            </Renderer.Component.DrawerItem>
-            <Renderer.Component.DrawerItem name="SAN">
-              {this.formatSAN(cert.subjectaltname)}
-            </Renderer.Component.DrawerItem>
-            <Renderer.Component.DrawerItem name="Issuer">
-              {cert.issuer.CN}
-            </Renderer.Component.DrawerItem>
-            <Renderer.Component.DrawerItem name="Not before">
-              {cert.valid_from}
-            </Renderer.Component.DrawerItem>
-            <Renderer.Component.DrawerItem name="Expires">
-              {this.formatDate(cert.valid_to)}
-            </Renderer.Component.DrawerItem>
-          </div>
-        );
-      } catch (e) {
-        console.error(e);
+        try {
+          let secureContext = tls.createSecureContext({
+            cert: certificateString
+          });
+
+          let secureSocket = new tls.TLSSocket(new net.Socket(), {
+            secureContext
+          });
+          let cert: PeerCertificate = secureSocket.getCertificate() as PeerCertificate;
+
+          certificates.push(
+            <div>
+              <Renderer.Component.DrawerTitle>Certificate Info - {key} ({i + 1})</Renderer.Component.DrawerTitle>
+              <Renderer.Component.DrawerItem name="CN">
+                {cert.subject.CN}
+              </Renderer.Component.DrawerItem>
+              <Renderer.Component.DrawerItem name="SAN">
+                {this.formatSAN(cert.subjectaltname)}
+              </Renderer.Component.DrawerItem>
+              <Renderer.Component.DrawerItem name="Issuer">
+                {cert.issuer.CN}
+              </Renderer.Component.DrawerItem>
+              <Renderer.Component.DrawerItem name="Not before">
+                {cert.valid_from}
+              </Renderer.Component.DrawerItem>
+              <Renderer.Component.DrawerItem name="Expires">
+                {this.formatDate(cert.valid_to)}
+              </Renderer.Component.DrawerItem>
+            </div>
+          );
+        } catch (e) {
+          console.error(e);
+        }
       }
     }
 
