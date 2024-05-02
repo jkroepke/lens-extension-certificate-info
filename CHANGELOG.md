@@ -1,3 +1,10 @@
+## [3.1.0](https://github.com/jkroepke/lens-extension-certificate-info/compare/v3.0.1...v3.1.0) (2024-05-02)
+
+### Features
+
+* Add cert serial number to output
+
+
 ## [3.0.1](https://github.com/jkroepke/lens-extension-certificate-info/compare/v3.0.0...v3.0.1) (2022-07-29)
 
 
