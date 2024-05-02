@@ -71,7 +71,7 @@ export class SecretDetails extends React.Component<Renderer.Component.KubeObject
               <Renderer.Component.DrawerItem name="SAN">
                 {this.formatSAN(cert.subjectaltname)}
               </Renderer.Component.DrawerItem>
-              <Renderer.Component.DrawerItem name="Serial Numbers">
+              <Renderer.Component.DrawerItem name="Serial Number">
                 {cert.serialNumber}
               </Renderer.Component.DrawerItem>
               <Renderer.Component.DrawerItem name="Issuer">
