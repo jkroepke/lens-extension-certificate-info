@@ -1,3 +1,10 @@
+# [3.1.0](https://github.com/jkroepke/lens-extension-certificate-info/compare/v3.0.1...v3.1.0) (2024-05-02)
+
+
+### Features
+
+* trigger release ([4db5eca](https://github.com/jkroepke/lens-extension-certificate-info/commit/4db5eca2f2de4bbfd710eddcec7c139cf53b555d))
+
 ## [3.1.0](https://github.com/jkroepke/lens-extension-certificate-info/compare/v3.0.1...v3.1.0) (2024-05-02)
 
 ### Features
