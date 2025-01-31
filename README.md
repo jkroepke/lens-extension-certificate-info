@@ -13,6 +13,13 @@ Only PEM formatted single certificated are supported yet.
 
 Pull request for more supported formats like Java Keystore, PKCS#12 are welcome.
 
+## Compatibility
+
+| Version                                                | Extension Version |
+|--------------------------------------------------------|-------------------|
+| [OpenLens](https://github.com/MuhammedKalkan/OpenLens) | <3                |
+| [FreeLens](https://github.com/freelensapp/freelens)    | >=4               |
+
 ## Installation
 
 ### Direct link to Lens
@@ -25,7 +32,7 @@ Menu > Extensions and search for `lens-certificate-info`.
 
 ### Alternatives downloads
 
-#### Github 
+#### Github
 https://github.com/jkroepke/lens-extension-certificate-info/releases/latest/download/lens-certificate-info.tgz
 
 #### NPM

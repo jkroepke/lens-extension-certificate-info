@@ -1,4 +1,4 @@
-import { Renderer } from "@k8slens/extensions";
+import { Renderer } from "@freelensapp/extensions";
 import { SecretDetails } from "./src/secret-details";
 import React from "react";
 

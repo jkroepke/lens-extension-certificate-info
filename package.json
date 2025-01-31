@@ -1,30 +1,43 @@
 {
   "name": "lens-certificate-info",
-  "version": "3.1.0",
-  "author": "Jan-Otto Kröpke <mail@jkroepke.de> (https://github.com/jkroepke)",
+  "version": "4.0.0",
+  "author": {
+    "name": "Jan-Otto Kröpke",
+    "email": "mail@jkroepke.de",
+    "url": "https://github.com/jkroepke"
+  },
   "publisher": "jkroepke",
   "description": "Lens extension get infos from certificates inside secrets.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/jkroepke/lens-extension-certificate-info.git"
+    "url": "git+https://github.com/jkroepke/lens-extension-certificate-info.git",
+    "directory": "."
   },
   "main": "dist/main.js",
   "renderer": "dist/renderer.js",
+  "copyright": "© 2021-2025 Jan-Otto Kröpke",
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
   "scripts": {
-    "start": "webpack --watch",
-    "build": "npm run clean && webpack",
+    "build": "npm run clean && npx webpack",
     "clean": "rimraf ./dist",
+    "dev": "npx webpack -- --watch",
+    "lint": "npx eslint .",
+    "test": "npx jest --passWithNoTests --env=jsdom src ",
     "semantic-release": "semantic-release"
   },
   "files": [
     "dist/"
   ],
   "engines": {
-    "lens": "^6.0.0"
+    "node": ">= 16.14.2",
+    "freelens": "^0.1.0"
   },
   "dependencies": {},
   "devDependencies": {
-    "@k8slens/extensions": "^6.0.0",
+    "@freelensapp/extensions": "^0.1.0",
     "@semantic-release/changelog": "^6.0.1",
     "@semantic-release/git": "^10.0.1",
     "@types/node": "^18.6.2",
@@ -47,7 +60,10 @@
   "keywords": [
     "extension",
     "k8slens",
-    "lens"
+    "lens",
+    "freelensapp",
+    "openlens",
+    "freelens"
   ],
   "release": {
     "branches": [

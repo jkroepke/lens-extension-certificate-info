@@ -1,4 +1,4 @@
-import { Renderer } from "@k8slens/extensions";
+import { Renderer } from "@freelensapp/extensions";
 import React from "react";
 import tls, { PeerCertificate } from "tls";
 import net from "net";
