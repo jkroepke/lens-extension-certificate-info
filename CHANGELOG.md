@@ -1,3 +1,13 @@
+# [4.0.0](https://github.com/jkroepke/lens-extension-certificate-info/compare/v3.1.0...v4.0.0) (2025-02-01)
+
+
+* feat!: FreeLens compatibility (#10) ([2d2fd36](https://github.com/jkroepke/lens-extension-certificate-info/commit/2d2fd36e85160325b1a4b6efab1fcc74759bfa64)), closes [#10](https://github.com/jkroepke/lens-extension-certificate-info/issues/10)
+
+
+### BREAKING CHANGES
+
+* This plugin is not longer compatible with OpenLens
+
 # [3.1.0](https://github.com/jkroepke/lens-extension-certificate-info/compare/v3.0.1...v3.1.0) (2024-05-02)
 
 
