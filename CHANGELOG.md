@@ -1,3 +1,10 @@
+## [4.1.1](https://github.com/jkroepke/lens-extension-certificate-info/compare/v4.1.0...v4.1.1) (2025-03-23)
+
+
+### Bug Fixes
+
+* release ([#11](https://github.com/jkroepke/lens-extension-certificate-info/issues/11)) ([75013d6](https://github.com/jkroepke/lens-extension-certificate-info/commit/75013d6eb002b478cdfd565ebe17e7b3c16ff563))
+
 # [4.1.0](https://github.com/jkroepke/lens-extension-certificate-info/compare/v4.0.0...v4.1.0) (2025-03-23)
 
 
