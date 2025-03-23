@@ -1,3 +1,10 @@
+# [4.1.0](https://github.com/jkroepke/lens-extension-certificate-info/compare/v4.0.0...v4.1.0) (2025-03-23)
+
+
+### Features
+
+* FreeLens 1.0.0 compatibility ([a2b7a1d](https://github.com/jkroepke/lens-extension-certificate-info/commit/a2b7a1db3f1694f3ed8c38dbd9f0873b828dd9e2))
+
 # [4.0.0](https://github.com/jkroepke/lens-extension-certificate-info/compare/v3.1.0...v4.0.0) (2025-02-01)
 
 
