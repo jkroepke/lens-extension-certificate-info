@@ -2,8 +2,6 @@ name: Release
 on:
   workflow_dispatch:
     inputs: {}
-  repository_dispatch:
-    types: [semantic-release]
 
 permissions:
   contents: write
