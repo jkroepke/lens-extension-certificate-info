@@ -24,11 +24,13 @@ export default defineConfig({
       sourcemap: true,
     },
     plugins: [
+      react({}),
       externalizeDepsPlugin({
         // do not bundle modules provided by the host app
         include: ["@freelensapp/extensions"],
       }),
       pluginExternal({
+        // the modules are provided by the host app as a global variable
         externals: {
           "@freelensapp/extensions": "global.LensExtensions",
         },
@@ -89,6 +91,7 @@ export default defineConfig({
           react: "global.React",
           "react-dom": "global.ReactDom",
           "react-router-dom": "global.ReactRouterDom",
+          "react/jsx-runtime": "global.ReactJsxRuntime",
         },
       }),
     ],

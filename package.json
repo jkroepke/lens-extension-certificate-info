@@ -65,8 +65,8 @@
     "@vitejs/plugin-react": "^4.7.0",
     "electron-vite": "^4.0.0",
     "react": "17.0.2",
-    "typescript": "5.8.3",
-    "vite": "^6.3.5",
+    "typescript": "5.9.2",
+    "vite": "^7.1.1",
     "vite-plugin-external": "^6.2.2"
   },
   "license": "MIT",
@@ -82,5 +82,5 @@
     "openlens",
     "freelens"
   ],
-  "packageManager": "pnpm@10.13.1"
+  "packageManager": "pnpm@10.14.0"
 }
