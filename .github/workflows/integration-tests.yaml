@@ -40,15 +40,15 @@ jobs:
 
     steps:
       - name: Checkout plugin
-        uses: actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
       - name: Setup node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version-file: .nvmrc
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@a7487c7e89a18df4991f7f222e4898a00d66ddda # v4.1.0
 
       - name: Disable pre post scripts for pnpm
         shell: bash
@@ -59,7 +59,7 @@ jobs:
         run: echo "pnpm_cache_dir=$(pnpm store path)" >> ${GITHUB_ENV}
 
       - name: Use pnpm cache
-        uses: actions/cache@v4
+        uses: actions/cache@0400d5f644dc74513175e3cd8d07132dd4860809 # v4.2.4
         with:
           path: ${{ env.pnpm_cache_dir }}
           key: ${{ matrix.os }}-${{ matrix.arch }}-node-${{ hashFiles('**/pnpm-lock.yaml') }}
@@ -109,7 +109,7 @@ jobs:
         run: echo "EXTENSION_PATH=$(find $(pwd) -name '*.tgz')" >> ${GITHUB_ENV}
 
       - name: Checkout app
-        uses: actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           repository: freelensapp/freelens
           ref: v${{ env.freelens_version }}
@@ -135,7 +135,7 @@ jobs:
           | sed 's/(.*)//')" >> $GITHUB_ENV
 
       - name: Use Electron cache
-        uses: actions/cache@v4
+        uses: actions/cache@0400d5f644dc74513175e3cd8d07132dd4860809 # v4.2.4
         with:
           path: ${{ env.ELECTRON_CACHE }}
           key: ${{ matrix.os }}-${{ matrix.arch }}-electron-${{ env.electron_version }}
@@ -143,7 +143,7 @@ jobs:
             ${{ matrix.os }}-${{ matrix.arch }}-electron-
 
       - name: Use Electron Builder cache
-        uses: actions/cache@v4
+        uses: actions/cache@0400d5f644dc74513175e3cd8d07132dd4860809 # v4.2.4
         with:
           path: ${{ env.ELECTRON_BUILDER_CACHE }}
           key: ${{ matrix.os }}-${{ matrix.arch }}-electron-builder-${{ env.electron_builder_version }}
@@ -152,7 +152,7 @@ jobs:
 
       - name: Use Playwright cache
         id: playwright-cache
-        uses: actions/cache@v4
+        uses: actions/cache@0400d5f644dc74513175e3cd8d07132dd4860809 # v4.2.4
         with:
           path: ${{ env.PLAYWRIGHT_BROWSERS_PATH }}
           key: ${{ matrix.os }}-${{ matrix.arch }}-playwright-${{ env.playwright_version }}
@@ -194,7 +194,7 @@ jobs:
         run: echo "kubernetes_version=$(yq -r .config.bundledKubectlVersion ../freelens/freelens/package.json)" >> $GITHUB_ENV
 
       - name: Install minikube
-        uses: manusa/actions-setup-minikube@v2.14.0
+        uses: manusa/actions-setup-minikube@b589f2d61bf96695c546929c72b38563e856059d # v2.14.0
         with:
           minikube version: v${{ env.minikube_version }}
           kubernetes version: v${{ env.kubernetes_version }}
