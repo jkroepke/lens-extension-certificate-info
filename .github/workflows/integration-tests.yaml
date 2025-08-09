@@ -1,31 +1,24 @@
-name: CI
+name: Integration tests
+
 on:
-  pull_request: {}
   push:
     branches:
       - main
+  pull_request:
+    branches:
+      - "*"
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+env:
+  minikube_version: 1.36.0 # datasource=github-releases depName=kubernetes/minikube
+
 jobs:
-  ci:
-    name: CI
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22
-
-      - name: Install dependencies
-        run: npm ci
-
-      - run: npm run build
-
-      - run: npm pack
-
   test-integration:
     name: "integration tests on ${{ matrix.os }} update ${{ matrix.update }}"
+
     strategy:
       fail-fast: false
       matrix:
@@ -44,54 +37,22 @@ jobs:
       ELECTRON_CACHE: ${{ github.workspace }}/.cache/electron
       ELECTRON_BUILDER_CACHE: ${{ github.workspace }}/.cache/electron-builder
       PLAYWRIGHT_BROWSERS_PATH: ${{ github.workspace }}/.cache/playwright
-      # renovate: github=kubernetes/minikube
-      minikube_version: 1.36.0
+
     steps:
       - name: Checkout plugin
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
+      - name: Setup node
         uses: actions/setup-node@v4
         with:
-          node-version: 22
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Get Freelens version
-        shell: bash
-        run: |
-          freelens_version=$(npm ls @freelensapp/extensions --include=dev --depth=0 --json| jq -r '.dependencies["@freelensapp/extensions"].version')
-          case "$freelens_version" in
-            [0-9]*) echo "freelens_version=${freelens_version}" >> ${GITHUB_ENV};;
-            *) exit 1
-          esac
-
-      - name: Build plugin
-        run: npm run build
-
-      - name: Pack plugin
-        run: npm pack
-
-      - name: Get extension path
-        shell: bash
-        run: echo "EXTENSION_PATH=$(ls *.tgz)" >> ${GITHUB_ENV}
-
-      - name: Checkout app
-        uses: actions/checkout@v4
-        with:
-          repository: freelensapp/freelens
-          ref: v${{ env.freelens_version }}
-          path: freelens
-
-      - name: Move app to upper directory
-        shell: bash
-        run: mv freelens ..
+          node-version-file: .nvmrc
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
-        with:
-          package_json_file: '../freelens/package.json'
+
+      - name: Disable pre post scripts for pnpm
+        shell: bash
+        run: pnpm config set enablePrePostScripts false
 
       - name: Get pnpm cache directory
         shell: bash
@@ -104,6 +65,59 @@ jobs:
           key: ${{ matrix.os }}-${{ matrix.arch }}-node-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
             ${{ matrix.os }}-${{ matrix.arch }}-node-
+
+      - name: Install pnpm dependencies for extension
+        id: install-pnpm-extension
+        shell: bash
+        run: timeout 300 pnpm install --color=always --prefer-offline --frozen-lockfile
+        continue-on-error: true
+
+      - name: Install pnpm dependencies for extension (retry)
+        if: steps.install-pnpm-extension.outcome == 'failure'
+        shell: bash
+        run: timeout 300 pnpm install --color=always --prefer-offline --frozen-lockfile
+
+      - name: Update pnpm dependencies for extension
+        id: update-pnpm-extension
+        if: matrix.update == true
+        shell: bash
+        run: timeout 300 pnpm update @freelensapp/extensions --color=always --prefer-offline
+        continue-on-error: true
+
+      - name: Update pnpm dependencies for extension (retry)
+        if: matrix.update == true && steps.update-pnpm-extension.outcome == 'failure'
+        shell: bash
+        run: timeout 300 pnpm update @freelensapp/extensions --color=always --prefer-offline
+
+      - name: Get Freelens version
+        shell: bash
+        run: |
+          freelens_version=$(pnpm list @freelensapp/extensions --json | jq -r '.[0].devDependencies["@freelensapp/extensions"].version')
+          case "$freelens_version" in
+            [0-9]*) echo "freelens_version=${freelens_version}" >> ${GITHUB_ENV};;
+            *) exit 1
+          esac
+
+      - name: Build plugin
+        run: pnpm build
+
+      - name: Pack plugin
+        run: pnpm pack
+
+      - name: Get extension path
+        shell: bash
+        run: echo "EXTENSION_PATH=$(find $(pwd) -name '*.tgz')" >> ${GITHUB_ENV}
+
+      - name: Checkout app
+        uses: actions/checkout@v4
+        with:
+          repository: freelensapp/freelens
+          ref: v${{ env.freelens_version }}
+          path: freelens
+
+      - name: Move app to upper directory
+        shell: bash
+        run: mv freelens ..
 
       - name: Get Electron version
         shell: bash
@@ -179,10 +193,13 @@ jobs:
       - name: Get Kubernetes version
         run: echo "kubernetes_version=$(yq -r .config.bundledKubectlVersion ../freelens/freelens/package.json)" >> $GITHUB_ENV
 
-      - name: Create kind cluster
-        uses: helm/kind-action@a1b0e391336a6ee6713a0583f8c6240d70863de3 # v1.12.0
+      - name: Install minikube
+        uses: manusa/actions-setup-minikube@v2.14.0
         with:
-          kubectl_version: 'v${{ env.kubernetes_version }}'
+          minikube version: v${{ env.minikube_version }}
+          kubernetes version: v${{ env.kubernetes_version }}
+          github token: ${{ secrets.GITHUB_TOKEN }}
+          driver: docker
 
       - name: Build extra resources
         id: build-resources
