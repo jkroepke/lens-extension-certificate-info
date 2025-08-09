@@ -1,4 +1,46 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["github>jkroepke/renovate-config"]
+  "extends": ["github>jkroepke/renovate-config"],
+  "ignoreDeps": [
+    "@freelensapp/extensions"
+  ],
+  "packageRules": [
+    {
+      "matchDepTypes": [
+        "peerDependencies"
+      ],
+      "rangeStrategy": "widen",
+      "semanticCommitScope": "peer-deps"
+    },
+    {
+      "matchDepNames": [
+        "@types/chart.js",
+        "@types/node",
+        "@types/react",
+        "electron",
+        "mobx-react",
+        "npm",
+        "react"
+      ],
+      "matchUpdateTypes": [
+        "major"
+      ],
+      "enabled": false
+    }
+  ],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "extractVersionTemplate": "^(?<version>.*)$",
+      "managerFilePatterns": [
+        "/^package\\.json$/"
+      ],
+      "matchStrings": [
+        "\"freelens\"\\s*:\\s*\"(?<currentValue>\\S+)\""
+      ],
+      "datasourceTemplate": "github-releases",
+      "depNameTemplate": "freelensapp/freelens",
+      "versioningTemplate": "npm"
+    }
+  ]
 }

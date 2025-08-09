@@ -13,42 +13,44 @@
     "url": "git+https://github.com/jkroepke/lens-extension-certificate-info.git",
     "directory": "."
   },
-  "main": "dist/main.js",
-  "renderer": "dist/renderer.js",
+  "main": "out/main/index.js",
+  "renderer": "out/renderer/index.js",
+  "files": [
+    "out/**/*"
+  ],
   "copyright": "© 2021-2025 Jan-Otto Kröpke",
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org/"
   },
   "scripts": {
-    "build": "npm run clean && npx webpack",
+    "build": "electron-vite build",
     "clean": "node -e \"require('fs').rmSync('dist', { recursive: true, force: true })\"",
     "dev": "npx webpack -- --watch",
     "lint": "npx eslint .",
     "semantic-release": "semantic-release"
   },
-  "files": [
-    "dist/"
-  ],
   "engines": {
-    "node": ">= 20.18.3",
-    "freelens": "^1.0.0"
+    "node": ">= 22.14.0",
+    "freelens": "^1.5.0"
   },
-  "dependencies": {},
   "devDependencies": {
-    "@freelensapp/extensions": "^1.1.0",
+    "@electron-toolkit/tsconfig": "^1.0.1",
+    "@freelensapp/extensions": "^1.5.2",
     "@semantic-release/changelog": "^6.0.1",
     "@semantic-release/git": "^10.0.1",
-    "@types/node": "^20.17.24",
+    "@types/node": "^22.17.1",
     "@types/react": "19.0.11",
     "@typescript-eslint/eslint-plugin": "^6.21.0",
+    "@vitejs/plugin-react": "^4.7.0",
+    "electron-vite": "^4.0.0",
     "husky": "^8.0.1",
     "lint-staged": "^13.0.3",
     "prettier": "2.7.1",
     "semantic-release": "^19.0.3",
     "ts-loader": "^9.5.2",
     "typescript": "5.8.2",
-    "webpack-cli": "^6.0.1"
+    "vite-plugin-external": "^6.2.2"
   },
   "license": "MIT",
   "homepage": "https://github.com/jkroepke/lens-extension-certificate-info",

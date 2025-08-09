@@ -30,11 +30,12 @@ export class SecretDetails extends React.Component<Renderer.Component.KubeObject
 
   render() {
     const secretKeys = this.props.object.getKeys();
+    const secretData = this.props.object.data;
     const certificates: any[] = [];
 
     for (const key of secretKeys) {
       const secretString = Buffer.from(
-        this.props.object.data[key],
+        secretData[key],
         "base64"
       ).toString("ascii");
 
