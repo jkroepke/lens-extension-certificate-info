@@ -30,8 +30,8 @@ importers:
         specifier: 17.0.2
         version: 17.0.2
       typescript:
-        specifier: 5.8.3
-        version: 5.8.3
+        specifier: 5.9.2
+        version: 5.9.2
       vite:
         specifier: ^6.3.5
         version: 6.3.5(@types/node@22.15.35)(less@4.4.0)(sass@1.90.0)(stylus@0.62.0)
@@ -2557,8 +2557,8 @@ packages:
     peerDependencies:
       typescript: '>=4.0.0'
 
-  typescript@5.8.3:
-    resolution: {integrity: sha512-p1diW6TqL9L07nNxvRMM7hMMw4c5XOo/1ibL4aAIGmSAt9slTE1Xgw5KWuof2uTOvCg9BY7ZRi+GaF+7sfgPeQ==}
+  typescript@5.9.2:
+    resolution: {integrity: sha512-CWBzXQrc/qOkhidw1OzBTQuYRbfyxDXJMVJ1XNwUHGROVmuaeiEm3OslpZ1RV96d7SKKjZKrSJu3+t/xlw3R9A==}
     engines: {node: '>=14.17'}
     hasBin: true
 
@@ -3515,8 +3515,8 @@ snapshots:
 
   '@freelensapp/typescript@1.5.2':
     dependencies:
-      typescript: 5.8.3
-      typescript-plugin-css-modules: 5.2.0(typescript@5.8.3)
+      typescript: 5.9.2
+      typescript-plugin-css-modules: 5.2.0(typescript@5.9.2)
     transitivePeerDependencies:
       - supports-color
       - ts-node
@@ -5585,7 +5585,7 @@ snapshots:
 
   typed-regex@0.0.8: {}
 
-  typescript-plugin-css-modules@5.2.0(typescript@5.8.3):
+  typescript-plugin-css-modules@5.2.0(typescript@5.9.2):
     dependencies:
       '@types/postcss-modules-local-by-default': 4.0.2
       '@types/postcss-modules-scope': 3.0.4
@@ -5602,14 +5602,14 @@ snapshots:
       sass: 1.90.0
       source-map-js: 1.2.1
       tsconfig-paths: 4.2.0
-      typescript: 5.8.3
+      typescript: 5.9.2
     optionalDependencies:
       stylus: 0.62.0
     transitivePeerDependencies:
       - supports-color
       - ts-node
 
-  typescript@5.8.3: {}
+  typescript@5.9.2: {}
 
   uglify-js@3.19.3:
     optional: true
