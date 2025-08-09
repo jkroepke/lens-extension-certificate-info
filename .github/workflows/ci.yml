@@ -177,11 +177,10 @@ jobs:
       - name: Get Kubernetes version
         run: echo "kubernetes_version=$(yq -r .config.bundledKubectlVersion ../freelens/freelens/package.json)" >> $GITHUB_ENV
 
-      - name: Install minikube
-        uses: manusa/actions-setup-minikube@v2.14.0
+      - name: Create kind cluster
+        uses: helm/kind-action@a1b0e391336a6ee6713a0583f8c6240d70863de3 # v1.12.0
         with:
-          kubernetes version: ''
-          minikube version: ''
+          kubectl_version: 'v${{ env.kubernetes_version }}'
 
       - name: Build extra resources
         id: build-resources
