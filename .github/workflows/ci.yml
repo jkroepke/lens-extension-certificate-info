@@ -26,7 +26,6 @@ jobs:
 
   test-integration:
     name: "integration tests on ${{ matrix.os }} update ${{ matrix.update }}"
-
     strategy:
       fail-fast: false
       matrix:
@@ -45,7 +44,8 @@ jobs:
       ELECTRON_CACHE: ${{ github.workspace }}/.cache/electron
       ELECTRON_BUILDER_CACHE: ${{ github.workspace }}/.cache/electron-builder
       PLAYWRIGHT_BROWSERS_PATH: ${{ github.workspace }}/.cache/playwright
-
+      # renovate: github=kubernetes/minikube
+      minikube_version: 1.36.0
     steps:
       - name: Checkout plugin
         uses: actions/checkout@v4
@@ -54,6 +54,21 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Get pnpm cache directory
+        shell: bash
+        run: echo "pnpm_cache_dir=$(pnpm store path)" >> ${GITHUB_ENV}
+
+      - name: Use pnpm cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.pnpm_cache_dir }}
+          key: ${{ matrix.os }}-${{ matrix.arch }}-node-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ matrix.os }}-${{ matrix.arch }}-node-
 
       - name: Install dependencies
         run: npm ci
@@ -75,7 +90,7 @@ jobs:
 
       - name: Get extension path
         shell: bash
-        run: echo "EXTENSION_PATH=$(find $(pwd) -name '*.tgz')" >> ${GITHUB_ENV}
+        run: echo "EXTENSION_PATH=$(find $(pwd) -name '*.tgz' -not -path "./node_modules/*")" >> ${GITHUB_ENV}
 
       - name: Checkout app
         uses: actions/checkout@v4
@@ -165,10 +180,8 @@ jobs:
       - name: Install minikube
         uses: manusa/actions-setup-minikube@v2.14.0
         with:
-          minikube version: v${{ env.minikube_version }}
-          kubernetes version: v${{ env.kubernetes_version }}
-          github token: ${{ secrets.GITHUB_TOKEN }}
-          driver: docker
+          kubernetes version: ''
+          minikube version: ''
 
       - name: Build extra resources
         id: build-resources
