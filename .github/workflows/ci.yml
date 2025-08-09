@@ -71,7 +71,7 @@ jobs:
         run: npm run build
 
       - name: Pack plugin
-        run: npm package
+        run: npm pack
 
       - name: Get extension path
         shell: bash
