@@ -64,11 +64,9 @@
     "@types/react": "^17.0.87",
     "@vitejs/plugin-react": "^4.7.0",
     "electron-vite": "^4.0.0",
-    "mobx": "6.13.7",
-    "mobx-react": "7.6.0",
     "react": "17.0.2",
-    "lint-staged": "^16.1.5",
     "typescript": "5.8.3",
+    "vite": "^6.3.5",
     "vite-plugin-external": "^6.2.2"
   },
   "license": "MIT",
