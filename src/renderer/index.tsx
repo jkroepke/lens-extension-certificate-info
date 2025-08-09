@@ -10,8 +10,8 @@ export default class CertificateInfoExtension extends Renderer.LensExtension {
       components: {
         Details: (props: Renderer.Component.KubeObjectDetailsProps<Renderer.K8sApi.Secret>) => (
           <SecretDetails {...props} />
-        )
-      }
-    }
+        ),
+      },
+    },
   ];
 }
