@@ -1,0 +1,23 @@
+{
+  "$schema": "https://unpkg.com/knip@5/schema-jsonc.json",
+
+  "entry": ["out/{main,preload}/index.js!", "src/main/index.ts", "src/renderer/index.tsx"],
+  "project": ["*.{js,mjs,ts}", "out/**/*.js!", "src/**/*.{ts,tsx}"],
+
+  "ignoreBinaries": ["build:.*"],
+  "ignoreDependencies": [
+    // used as vite plugin
+    "@babel/plugin-proposal-decorators",
+    // provided by the application
+    "@freelensapp/extensions"
+  ],
+
+  "typescript": {
+    "config": ["tsconfig.json"]
+  },
+  "vite": {
+    "config": ["electron.vite.config.ts"]
+  },
+
+  "exclude": ["exports"]
+}

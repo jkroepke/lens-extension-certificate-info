@@ -1,0 +1,111 @@
+{
+  "$schema": "https://biomejs.dev/schemas/2.1.2/schema.json",
+  "assist": {
+    "actions": {
+      "source": {
+        "organizeImports": {
+          "level": "on",
+          "options": {
+            "groups": [
+              {
+                "type": false
+              },
+              ":NODE:",
+              ":BLANK_LINE:",
+              "@freelensapp/**",
+              ":BLANK_LINE:",
+              ":PACKAGE:",
+              ":BLANK_LINE:",
+              ":PATH:"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "files": {
+    "includes": ["**", "!**/.trunk/**", "!**/build/**", "!**/dist/**", "!**/*.css.d.ts", "!**/*.scss.d.ts"]
+  },
+  "formatter": {
+    "attributePosition": "auto",
+    "bracketSpacing": true,
+    "enabled": true,
+    "formatWithErrors": false,
+    "indentStyle": "space",
+    "indentWidth": 2,
+    "lineEnding": "lf",
+    "lineWidth": 120,
+    "useEditorconfig": true
+  },
+  "html": {
+    "formatter": {
+      "enabled": true
+    }
+  },
+  "javascript": {
+    "formatter": {
+      "arrowParentheses": "always",
+      "attributePosition": "auto",
+      "bracketSameLine": false,
+      "bracketSpacing": true,
+      "jsxQuoteStyle": "double",
+      "quoteProperties": "asNeeded",
+      "quoteStyle": "double",
+      "semicolons": "always",
+      "trailingCommas": "all"
+    }
+  },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "a11y": {
+        "noRedundantRoles": "off"
+      },
+      "complexity": {
+        // should be error later
+        "noBannedTypes": "off",
+        "noUselessConstructor": "off",
+        "noUselessThisAlias": "error",
+        "noUselessTypeConstraint": "error"
+      },
+      "correctness": {
+        "noInvalidUseBeforeDeclaration": "error",
+        // should be error later
+        "noUnusedVariables": "off",
+        "useExhaustiveDependencies": "off"
+      },
+      "recommended": false,
+      "style": {
+        "noNamespace": "error",
+        // should be error later
+        "noParameterAssign": "off",
+        "useArrayLiterals": "off",
+        "useAsConstAssertion": "error",
+        "useBlockStatements": "off",
+        "useNamingConvention": {
+          "level": "off",
+          "options": {
+            "strictCase": false
+          }
+        },
+        // should be error later
+        "useTemplate": "off"
+      },
+      "suspicious": {
+        "noEmptyInterface": "off",
+        // should be error later
+        "noExplicitAny": "off",
+        "noExtraNonNullAssertion": "error",
+        "noMisleadingInstantiator": "error",
+        // should be error later
+        "noUnsafeDeclarationMerging": "off",
+        "useNamespaceKeyword": "error"
+      }
+    }
+  },
+  "vcs": {
+    "clientKind": "git",
+    "enabled": true,
+    "useIgnoreFile": true
+  }
+}

@@ -1,9 +1,7 @@
 import { Renderer } from "@freelensapp/extensions";
-import { SecretDetails } from "./src/secret-details";
-import React from "react";
+import { SecretDetails } from "./component/secret-details";
 
-
-export default class CertificateInfoExtension extends Renderer.LensExtension {
+export default class CertificateInfoExtensionRenderer extends Renderer.LensExtension {
   kubeObjectDetailItems = [
     {
       kind: "Secret",
@@ -12,8 +10,8 @@ export default class CertificateInfoExtension extends Renderer.LensExtension {
       components: {
         Details: (props: Renderer.Component.KubeObjectDetailsProps<Renderer.K8sApi.Secret>) => (
           <SecretDetails {...props} />
-        )
-      }
-    }
+        ),
+      } as any,
+    },
   ];
 }

@@ -1,3 +1,15 @@
-dist/
-node_modules/
-CHANGELOG.md
+## Ignore files handled by Biome
+*.css
+*.html
+*.js
+*.json
+*.json5
+*.jsonc
+*.jsx
+*.md
+*.mjs
+*.mts
+*.ts
+*.tsx
+*.xml
+*.yaml
