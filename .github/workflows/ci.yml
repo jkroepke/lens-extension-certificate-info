@@ -75,7 +75,7 @@ jobs:
 
       - name: Get extension path
         shell: bash
-        run: echo "EXTENSION_PATH=$(find $(pwd) -name '*.tgz' -not -path "./node_modules/*")" >> ${GITHUB_ENV}
+        run: echo "EXTENSION_PATH=$(ls *.tgz)" >> ${GITHUB_ENV}
 
       - name: Checkout app
         uses: actions/checkout@v4
