@@ -1,6 +1,9 @@
 name: Automated biome migrate
 
 on:
+  issue_comment:
+    types:
+      - created
   push:
     branches:
       - main
