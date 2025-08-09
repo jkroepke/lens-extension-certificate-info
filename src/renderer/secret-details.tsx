@@ -29,11 +29,22 @@ export class SecretDetails extends React.Component<Renderer.Component.KubeObject
   }
 
   render() {
-    const secretKeys = this.props.object.getKeys();
-    const secretData = this.props.object.data;
+    const { object } = this.props;
+
+    if (!object || !object.data) {
+      return;
+    }
+
+    const secretKeys = object.getKeys();
+    const secretData = object.data;
     const certificates: any[] = [];
 
     for (const key of secretKeys) {
+      if (!secretData[key] || !secretData[key].startsWith("LS0tLS1CRUdJTi")) {
+        // The key does not contain a valid PEM certificate header
+        continue;
+      }
+
       const secretString = Buffer.from(secretData[key], "base64").toString("ascii");
 
       const PEM_CERTIFICATE_HEADER = "-----BEGIN CERTIFICATE-----";
