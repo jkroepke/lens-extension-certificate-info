@@ -5,6 +5,7 @@
     "composite": true,
     "esModuleInterop": true,
     "jsx": "react-jsx",
+    "moduleResolution": "bundler",
     "types": ["vite/client", "electron-vite/node"]
   }
 }
