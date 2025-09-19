@@ -62,7 +62,7 @@
     "@freelensapp/extensions": "^1.5.2",
     "@types/node": "~22.15.35",
     "@types/react": "^17.0.88",
-    "@vitejs/plugin-react": "^5.0.2",
+    "@vitejs/plugin-react": "^5.0.3",
     "electron-vite": "^4.0.0",
     "react": "17.0.2",
     "typescript": "5.9.2",
