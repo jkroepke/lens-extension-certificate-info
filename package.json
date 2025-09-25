@@ -58,7 +58,7 @@
     "freelens": "^1.5.2"
   },
   "devDependencies": {
-    "@electron-toolkit/tsconfig": "^1.0.1",
+    "@electron-toolkit/tsconfig": "^2.0.0",
     "@freelensapp/extensions": "^1.5.2",
     "@types/node": "~22.15.35",
     "@types/react": "^17.0.88",
