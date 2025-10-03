@@ -65,7 +65,7 @@
     "@vitejs/plugin-react": "^5.0.3",
     "electron-vite": "^4.0.1",
     "react": "17.0.2",
-    "typescript": "5.9.2",
+    "typescript": "5.9.3",
     "vite": "^7.1.7",
     "vite-plugin-external": "^6.2.2"
   },
