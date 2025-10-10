@@ -1,3 +1,5 @@
+engineStrict: true
+
 onlyBuiltDependencies:
   - '@parcel/watcher'
   - esbuild
