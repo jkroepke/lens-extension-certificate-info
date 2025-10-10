@@ -24,7 +24,9 @@ export default defineConfig({
       sourcemap: true,
     },
     plugins: [
-      react({}),
+      react({
+        babel: {},
+      }),
       externalizeDepsPlugin({
         // do not bundle modules provided by the host app
         include: ["@freelensapp/extensions"],
@@ -65,8 +67,7 @@ export default defineConfig({
     },
     plugins: [
       react({
-        // do not use `react/jsx-runtime` module in transpiled code
-        jsxRuntime: "classic",
+        babel: {},
       }),
       externalizeDepsPlugin({
         // do not bundle modules provided by the host app

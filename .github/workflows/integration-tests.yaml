@@ -13,11 +13,12 @@ permissions:
   contents: read
 
 env:
-  minikube_version: 1.37.0 # datasource=github-releases depName=kubernetes/minikube
+  kind_version: 0.30.0 # datasource=github-releases depName=kubernetes-sigs/kind
+  kubernetes_version: 1.34.0 # datasource=docker depName=kindest/node
 
 jobs:
   test-integration:
-    name: "integration tests on ${{ matrix.os }} update ${{ matrix.update }}"
+    name: "integration tests on ${{ matrix.os }} with Freelens ${{ matrix.freelens_version }}"
 
     strategy:
       fail-fast: false
@@ -25,10 +26,13 @@ jobs:
         include:
           - os: ubuntu-22.04
             arch: x64
-            update: false
+            freelens_version: v1.5.2
           - os: ubuntu-22.04
             arch: x64
-            update: true
+            freelens_version: v1.6.1
+          - os: ubuntu-22.04
+            arch: x64
+            freelens_version: main
 
     runs-on: ${{ matrix.os }}
     timeout-minutes: 60
@@ -40,31 +44,20 @@ jobs:
 
     steps:
       - name: Checkout plugin
-        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        uses: actions/checkout@v5
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@41ff72655975bd51cab0327fa583b6e92b6d3061 # v4.2.0
+        run: corepack enable
 
       - name: Setup node
-        uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
+        uses: actions/setup-node@v5
         with:
           node-version-file: .nvmrc
+          cache: pnpm
 
       - name: Disable pre post scripts for pnpm
         shell: bash
         run: pnpm config set enablePrePostScripts false
-
-      - name: Get pnpm cache directory
-        shell: bash
-        run: echo "pnpm_cache_dir=$(pnpm store path)" >> ${GITHUB_ENV}
-
-      - name: Use pnpm cache
-        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
-        with:
-          path: ${{ env.pnpm_cache_dir }}
-          key: ${{ matrix.os }}-${{ matrix.arch }}-node-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ matrix.os }}-${{ matrix.arch }}-node-
 
       - name: Install pnpm dependencies for extension
         id: install-pnpm-extension
@@ -77,27 +70,6 @@ jobs:
         shell: bash
         run: timeout 300 pnpm install --color=always --prefer-offline --frozen-lockfile
 
-      - name: Update pnpm dependencies for extension
-        id: update-pnpm-extension
-        if: matrix.update == true
-        shell: bash
-        run: timeout 300 pnpm update @freelensapp/extensions --color=always --prefer-offline
-        continue-on-error: true
-
-      - name: Update pnpm dependencies for extension (retry)
-        if: matrix.update == true && steps.update-pnpm-extension.outcome == 'failure'
-        shell: bash
-        run: timeout 300 pnpm update @freelensapp/extensions --color=always --prefer-offline
-
-      - name: Get Freelens version
-        shell: bash
-        run: |
-          freelens_version=$(pnpm list @freelensapp/extensions --json | jq -r '.[0].devDependencies["@freelensapp/extensions"].version')
-          case "$freelens_version" in
-            [0-9]*) echo "freelens_version=${freelens_version}" >> ${GITHUB_ENV};;
-            *) exit 1
-          esac
-
       - name: Build plugin
         run: pnpm build
 
@@ -109,10 +81,11 @@ jobs:
         run: echo "EXTENSION_PATH=$(find $(pwd) -name '*.tgz')" >> ${GITHUB_ENV}
 
       - name: Checkout app
-        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        if: matrix.freelens_version != 'latest'
+        uses: actions/checkout@v5
         with:
           repository: freelensapp/freelens
-          ref: v${{ env.freelens_version }}
+          ref: ${{ matrix.freelens_version }}
           path: freelens
 
       - name: Move app to upper directory
@@ -135,7 +108,7 @@ jobs:
           | sed 's/(.*)//')" >> $GITHUB_ENV
 
       - name: Use Electron cache
-        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        uses: actions/cache@v4
         with:
           path: ${{ env.ELECTRON_CACHE }}
           key: ${{ matrix.os }}-${{ matrix.arch }}-electron-${{ env.electron_version }}
@@ -143,7 +116,7 @@ jobs:
             ${{ matrix.os }}-${{ matrix.arch }}-electron-
 
       - name: Use Electron Builder cache
-        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        uses: actions/cache@v4
         with:
           path: ${{ env.ELECTRON_BUILDER_CACHE }}
           key: ${{ matrix.os }}-${{ matrix.arch }}-electron-builder-${{ env.electron_builder_version }}
@@ -152,7 +125,7 @@ jobs:
 
       - name: Use Playwright cache
         id: playwright-cache
-        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        uses: actions/cache@v4
         with:
           path: ${{ env.PLAYWRIGHT_BROWSERS_PATH }}
           key: ${{ matrix.os }}-${{ matrix.arch }}-playwright-${{ env.playwright_version }}
@@ -185,21 +158,22 @@ jobs:
       - name: Build app
         run: cd ../freelens && pnpm --color=always --stream build
 
+      - name: Rebuild native packages for Electron
+        run: cd ../freelens && pnpm --color=always electron-rebuild -a ${{ matrix.arch }}
+
       - name: Copy tests from plugin to app
         run: |
           rm -f ../freelens/freelens/integration/__tests__/*
           cp integration/__tests__/* ../freelens/freelens/integration/__tests__
 
-      - name: Get Kubernetes version
-        run: echo "kubernetes_version=$(yq -r .config.bundledKubectlVersion ../freelens/freelens/package.json)" >> $GITHUB_ENV
-
-      - name: Install minikube
-        uses: manusa/actions-setup-minikube@b589f2d61bf96695c546929c72b38563e856059d # v2.14.0
+      - name: Start KinD cluster (Linux)
+        if: runner.os == 'Linux'
+        uses: helm/kind-action@v1
         with:
-          minikube version: v${{ env.minikube_version }}
-          kubernetes version: v${{ env.kubernetes_version }}
-          github token: ${{ secrets.GITHUB_TOKEN }}
-          driver: docker
+          cluster_name: freelens
+          version: v${{ env.kind_version }}
+          node_image: kindest/node:v${{ env.kubernetes_version }}
+          wait: 5m
 
       - name: Build extra resources
         id: build-resources
