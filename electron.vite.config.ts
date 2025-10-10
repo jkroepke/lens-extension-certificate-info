@@ -24,7 +24,18 @@ export default defineConfig({
       sourcemap: true,
     },
     plugins: [
-      react({}),
+      react({
+        babel: {
+          plugins: [
+            [
+              "@babel/plugin-proposal-decorators",
+              {
+                version: "2023-05",
+              },
+            ],
+          ],
+        },
+      }),
       externalizeDepsPlugin({
         // do not bundle modules provided by the host app
         include: ["@freelensapp/extensions"],
@@ -65,8 +76,16 @@ export default defineConfig({
     },
     plugins: [
       react({
-        // do not use `react/jsx-runtime` module in transpiled code
-        jsxRuntime: "classic",
+        babel: {
+          plugins: [
+            [
+              "@babel/plugin-proposal-decorators",
+              {
+                version: "2023-05",
+              },
+            ],
+          ],
+        },
       }),
       externalizeDepsPlugin({
         // do not bundle modules provided by the host app
