@@ -45,30 +45,18 @@ jobs:
           private-key: ${{ secrets.AUTOMATION_APP_PRIVATE_KEY }}
 
       - name: Checkout
-        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        uses: actions/checkout@v5
         with:
           token: ${{ steps.app-token.outputs.token }}
+
+      - name: Setup pnpm
+        run: corepack enable
 
       - name: Setup node
         uses: actions/setup-node@v5
         with:
           node-version-file: .nvmrc
-          package-manager-cache: false
-
-      - name: Setup pnpm
-        run: corepack enable
-
-      - name: Get pnpm cache directory
-        shell: bash
-        run: echo "pnpm_cache_dir=$(pnpm store path)" >> ${GITHUB_ENV}
-
-      - name: Use pnpm cache
-        uses: actions/cache@v4
-        with:
-          path: ${{ env.pnpm_cache_dir }}
-          key: ${{ matrix.os }}-${{ matrix.arch }}-node-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ matrix.os }}-${{ matrix.arch }}-node-
+          cache: pnpm
 
       - name: Install pnpm dependencies
         id: install-pnpm
@@ -80,7 +68,9 @@ jobs:
         run: timeout 300 pnpm install --color=always --prefer-offline --frozen-lockfile
 
       - name: Run biome migrate
-        run: pnpm biome:migrate | tee .github/pr_body.log
+        run: |
+          set -o pipefail
+          pnpm biome:migrate | tee .github/pr_body.log
 
       - name: Check for changes
         run: |
@@ -92,7 +82,7 @@ jobs:
 
       - name: Commit and push to branch
         if: env.changes == 'true'
-        uses: EndBug/add-and-commit@a94899bca583c204427a224a7af87c02f9b325d5 # v9.1.4
+        uses: EndBug/add-and-commit@v9
         with:
           github_token: ${{ steps.app-token.outputs.token }}
           default_author: github_actions

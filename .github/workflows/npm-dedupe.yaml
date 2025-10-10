@@ -1,25 +1,21 @@
-name: Automated trunk upgrade
+name: Automated npm dedupe
 
 on:
   issue_comment:
     types:
       - created
-  push:
-    branches:
-      - main
-    paths:
-      - .trunk/**
   schedule:
-    - cron: 2 6 * * *
+    - cron: 46 6 * * *
   workflow_dispatch: {}
 
 permissions:
   contents: write
+  id-token: write
   pull-requests: write
 
 jobs:
-  trunk-upgrade:
-    name: trunk upgrade
+  npm-dedupe:
+    name: npm dedupe
 
     strategy:
       fail-fast: false
@@ -33,13 +29,20 @@ jobs:
     timeout-minutes: 10
 
     if: >-
-      github.event_name != 'issue_comment' || (startsWith(github.event.issue.title, 'Automated trunk upgrade') && contains(github.event.comment.body,
+      github.event_name != 'issue_comment' || (startsWith(github.event.issue.title, 'Automated npm dedupe') && contains(github.event.comment.body,
       '/rerun'))
 
     steps:
+      - uses: actions/create-github-app-token@67018539274d69449ef7c02e8e71183d1719ab42 # v2.1.4
+        id: app-token
+        with:
+          app-id: 1248576
+          private-key: ${{ secrets.AUTOMATION_APP_PRIVATE_KEY }}
+
       - name: Checkout
         uses: actions/checkout@v5
         with:
+          fetch-depth: 0
           token: ${{ steps.app-token.outputs.token }}
 
       - name: Setup pnpm
@@ -60,15 +63,11 @@ jobs:
         if: steps.install-pnpm.outcome == 'failure'
         run: timeout 300 pnpm install --color=always --prefer-offline --frozen-lockfile
 
-      - name: Set up Trunk
-        run: curl https://get.trunk.io -fsSL | bash -s -- -y
-
-      - name: Trunk upgrade
+      - name: Run pnpm dedupe
         run: |
           set -o pipefail
-          trunk upgrade --yes-to-all --no-progress --ci --color | tee .github/update.log
-          sed -e '/Downloading Trunk/,/Unpacking Trunk... done/d' -e 's/\x1b\[[0-9;]*m//g' -e 's/^\(  \)\{0,1\}  /\1- /' .github/update.log > .github/pr_body.log
-          perl -0777 -ne 'print join ", ", map {s/://gr} map {s/^- //r} grep {/^(-|cli) /} split "\n"' .github/pr_body.log > .github/pr_title.log
+          pnpm dedupe 2>&1 | tee .github/update.log || true
+          sed -e 's/\x1b\[[0-9;]*m//g' .github/update.log > .github/pr_body.log
 
       - name: Check for changes
         run: |
@@ -78,37 +77,28 @@ jobs:
             echo "changes=true" >> $GITHUB_ENV
           fi
 
-      - name: Trunk Check
-        if: env.changes == 'true'
-        uses: trunk-io/trunk-action@v1
-        with:
-          check-mode: all
-        continue-on-error: true
-
       - name: Commit and push to branch
         if: env.changes == 'true'
         uses: EndBug/add-and-commit@v9
         with:
           github_token: ${{ steps.app-token.outputs.token }}
           default_author: github_actions
-          message: Automated trunk upgrade [skip ci]
-          new_branch: automated/trunk-upgrade
-          fetch: false
-          push: origin automated/trunk-upgrade --set-upstream --force
+          message: Automated npm dedupe
+          new_branch: automated/npm-dedupe
+          push: origin automated/npm-dedupe --set-upstream --force
 
       - name: Create pull request
         if: env.changes == 'true'
         run: |-
-          if [[ $(gh pr view automated/trunk-upgrade --json state --jq .state || true) != "OPEN" ]]; then
+          if [[ $(gh pr view automated/npm-dedupe --json state --jq .state || true) != "OPEN" ]]; then
             gh pr create \
-              --head automated/trunk-upgrade \
-              --title "Automated trunk upgrade $(cat .github/pr_title.log) [skip ci]" \
+              --head automated/npm-dedupe \
+              --title "Automated npm dedupe" \
               --body-file .github/pr_body.log \
-              --label automated \
-              --label trunk
+              --label automated
           else
-            gh pr edit automated/trunk-upgrade \
-              --title "Automated trunk upgrade $(cat .github/pr_title.log) [skip ci]" \
+            gh pr edit automated/npm-dedupe \
+              --title "Automated npm dedupe" \
               --body-file .github/pr_body.log
           fi
         env:
@@ -116,6 +106,6 @@ jobs:
 
       - name: Close pull request
         if: env.changes == 'false'
-        run: gh pr list --head automated/trunk-upgrade --json number --jq '.[].number' | xargs -rn1 gh pr close --delete-branch
+        run: gh pr list --head automated/npm-dedupe --json number --jq '.[].number' | xargs -rn1 gh pr close --delete-branch
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
