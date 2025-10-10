@@ -44,16 +44,28 @@ jobs:
 
     steps:
       - name: Checkout plugin
-        uses: actions/checkout@v5
-
-      - name: Setup pnpm
-        run: corepack enable
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
 
       - name: Setup node
         uses: actions/setup-node@v5
         with:
           node-version-file: .nvmrc
-          cache: pnpm
+          package-manager-cache: false
+
+      - name: Setup pnpm
+        run: corepack enable
+
+      - name: Get pnpm cache directory
+        shell: bash
+        run: echo "pnpm_cache_dir=$(pnpm store path)" >> ${GITHUB_ENV}
+
+      - name: Use pnpm cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.pnpm_cache_dir }}
+          key: ${{ matrix.os }}-${{ matrix.arch }}-node-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ matrix.os }}-${{ matrix.arch }}-node-
 
       - name: Disable pre post scripts for pnpm
         shell: bash
@@ -82,7 +94,7 @@ jobs:
 
       - name: Checkout app
         if: matrix.freelens_version != 'latest'
-        uses: actions/checkout@v5
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
         with:
           repository: freelensapp/freelens
           ref: ${{ matrix.freelens_version }}
@@ -108,7 +120,7 @@ jobs:
           | sed 's/(.*)//')" >> $GITHUB_ENV
 
       - name: Use Electron cache
-        uses: actions/cache@v4
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
         with:
           path: ${{ env.ELECTRON_CACHE }}
           key: ${{ matrix.os }}-${{ matrix.arch }}-electron-${{ env.electron_version }}
@@ -116,7 +128,7 @@ jobs:
             ${{ matrix.os }}-${{ matrix.arch }}-electron-
 
       - name: Use Electron Builder cache
-        uses: actions/cache@v4
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
         with:
           path: ${{ env.ELECTRON_BUILDER_CACHE }}
           key: ${{ matrix.os }}-${{ matrix.arch }}-electron-builder-${{ env.electron_builder_version }}
@@ -125,7 +137,7 @@ jobs:
 
       - name: Use Playwright cache
         id: playwright-cache
-        uses: actions/cache@v4
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
         with:
           path: ${{ env.PLAYWRIGHT_BROWSERS_PATH }}
           key: ${{ matrix.os }}-${{ matrix.arch }}-playwright-${{ env.playwright_version }}
@@ -168,7 +180,7 @@ jobs:
 
       - name: Start KinD cluster (Linux)
         if: runner.os == 'Linux'
-        uses: helm/kind-action@v1
+        uses: helm/kind-action@a1b0e391336a6ee6713a0583f8c6240d70863de3 # v1.12.0
         with:
           cluster_name: freelens
           version: v${{ env.kind_version }}
