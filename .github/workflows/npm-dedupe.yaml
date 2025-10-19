@@ -113,6 +113,8 @@ jobs:
               --title "Automated npm dedupe" \
               --body-file .github/pr_body.log
           fi
+
+          gh pr merge --auto --squash --delete-branch automated/npm-dedupe
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
 

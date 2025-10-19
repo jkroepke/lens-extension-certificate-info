@@ -118,6 +118,8 @@ jobs:
               --title "Automated biome migrate [skip ci]" \
               --body-file .github/pr_body.log
           fi
+
+          gh pr merge --admin --squash --delete-branch automated/biome-migrate
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
 

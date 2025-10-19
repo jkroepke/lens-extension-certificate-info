@@ -129,6 +129,8 @@ jobs:
               --title "Automated trunk upgrade $(cat .github/pr_title.log) [skip ci]" \
               --body-file .github/pr_body.log
           fi
+
+          gh pr merge --admin --squash --delete-branch automated/trunk-upgrade
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
 
