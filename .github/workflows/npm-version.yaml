@@ -114,10 +114,10 @@ jobs:
 
           gh pr merge --auto --squash --delete-branch automated/npm-version
         env:
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
 
       - name: Close pull request
         if: env.changes == 'false'
         run: gh pr list --head automated/npm-version --json number --jq '.[].number' | xargs -rn1 gh pr close --delete-branch
         env:
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
