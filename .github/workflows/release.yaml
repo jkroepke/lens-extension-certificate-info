@@ -39,7 +39,7 @@ jobs:
         with:
           node-version-file: .nvmrc
           package-manager-cache: false
-          registry-url: 'https://registry.npmjs.org'
+          registry-url: https://registry.npmjs.org
 
       # Ensure npm 11.5.1 or later is installed
       - name: Update npm
