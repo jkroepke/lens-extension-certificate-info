@@ -39,6 +39,11 @@ jobs:
         with:
           node-version-file: .nvmrc
           package-manager-cache: false
+          registry-url: 'https://registry.npmjs.org'
+
+      # Ensure npm 11.5.1 or later is installed
+      - name: Update npm
+        run: npm install -g npm@latest
 
       - name: Setup pnpm
         run: corepack enable
@@ -82,8 +87,6 @@ jobs:
           pnpm --color=always publish -r \
             --no-git-checks \
             --tag ${dist_tag}
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         continue-on-error: true
 
       - name: Publish npm packages (retry)
@@ -97,8 +100,6 @@ jobs:
           pnpm --color=always publish -r \
             --no-git-checks \
             --tag ${dist_tag}
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         continue-on-error: true
 
       - name: Publish npm packages (retry 2)
@@ -111,8 +112,6 @@ jobs:
           pnpm --color=always publish -r \
             --no-git-checks \
             --tag ${dist_tag}
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Create release
         uses: softprops/action-gh-release@6da8fa9354ddfdc4aeace5fc48d7f679b5214090 # v2.4.1
