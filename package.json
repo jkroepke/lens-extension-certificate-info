@@ -63,7 +63,7 @@
     "@electron-toolkit/tsconfig": "^2.0.0",
     "@freelensapp/extensions": "^1.6.1",
     "@types/node": "~22.15.35",
-    "@types/react": "^17.0.89",
+    "@types/react": "^17.0.90",
     "@vitejs/plugin-react": "^5.1.0",
     "electron-vite": "^4.0.1",
     "react": "17.0.2",
