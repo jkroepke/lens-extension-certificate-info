@@ -34,8 +34,12 @@ export class SecretDetails extends React.Component<Renderer.Component.KubeObject
   }
 
   formatIssuer(issuer: string, subject: string) {
-    if (!issuer) {
-      return <React.Fragment><i>No issuer</i></React.Fragment>;
+    if (issuer) {
+      return (
+        <React.Fragment>
+          <i>No issuer</i>
+        </React.Fragment>
+      );
     }
 
     const issuerCN = this.extractCN(issuer);
