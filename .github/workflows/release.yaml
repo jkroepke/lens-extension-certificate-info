@@ -41,7 +41,7 @@ jobs:
         with:
           node-version-file: .nvmrc
           package-manager-cache: false
-          registry-url: "https://registry.npmjs.org" # Trusted OIDC
+          registry-url: https://registry.npmjs.org # Trusted OIDC
 
       # Ensure npm 11.5.1 or later is installed
       - name: Update npm
