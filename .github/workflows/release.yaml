@@ -5,9 +5,7 @@ on:
     tags:
       - v*
 
-permissions:
-  contents: write
-  id-token: write
+permissions: {}
 
 jobs:
   release:
@@ -27,6 +25,10 @@ jobs:
     env:
       VITE_PRESERVE_MODULES: "false"
 
+    permissions:
+      contents: write
+      id-token: write
+
     steps:
       - name: Checkout plugin
         uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
@@ -39,6 +41,7 @@ jobs:
         with:
           node-version-file: .nvmrc
           package-manager-cache: false
+          registry-url: 'https://registry.npmjs.org' # Trusted OIDC
 
       # Ensure npm 11.5.1 or later is installed
       - name: Update npm
