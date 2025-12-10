@@ -28,10 +28,10 @@ export class SecretDetails extends React.Component<Renderer.Component.KubeObject
   }
 
   private extractCN(distinguishedName: string): string | undefined {
-    if (typoeof distinguishedName === "undefined") {
-      return undefined
+    if (typeof distinguishedName === "undefined") {
+      return undefined;
     }
-    
+
     // Use regex for more efficient CN extraction
     const cnMatch = distinguishedName.match(/CN=([^,\n]+)/);
     return cnMatch ? cnMatch[1].trim() : distinguishedName;
@@ -39,8 +39,8 @@ export class SecretDetails extends React.Component<Renderer.Component.KubeObject
 
   formatIssuer(issuer: string, subject: string) {
     const issuerCN = this.extractCN(issuer);
-    
-    if (typoeof issuerCN === "undefined") {
+
+    if (typeof issuerCN === "undefined") {
       return (
         <React.Fragment>
           <i>No issuer</i>
@@ -52,10 +52,10 @@ export class SecretDetails extends React.Component<Renderer.Component.KubeObject
 
     if (!selfSigned) {
       // More precise self-signed detection
-      selfSigned = this.extractCN(subject) === issuerCN
+      selfSigned = this.extractCN(subject) === issuerCN;
     }
-    
-    if (selfSigned)
+
+    if (selfSigned) {
       return (
         <React.Fragment>
           {issuerCN} <i>(self-signed)</i>
