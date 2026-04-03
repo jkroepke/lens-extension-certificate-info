@@ -62,7 +62,6 @@
   "devDependencies": {
     "@electron-toolkit/tsconfig": "^2.0.0",
     "@freelensapp/extensions": "^1.6.1",
-    "@rolldown/plugin-babel": "^0.2.2",
     "@types/node": "~22.15.35",
     "@types/react": "^17.0.91",
     "@vitejs/plugin-react": "^6.0.1",
