@@ -24,9 +24,7 @@ export default defineConfig({
       sourcemap: true,
     },
     plugins: [
-      react({
-        babel: {},
-      }),
+      react(),
       externalizeDepsPlugin({
         // do not bundle modules provided by the host app
         include: ["@freelensapp/extensions"],
@@ -66,9 +64,7 @@ export default defineConfig({
       },
     },
     plugins: [
-      react({
-        babel: {},
-      }),
+      react(),
       externalizeDepsPlugin({
         // do not bundle modules provided by the host app
         include: [
