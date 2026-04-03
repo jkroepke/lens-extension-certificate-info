@@ -2,6 +2,7 @@ import { resolve } from "node:path";
 import react from "@vitejs/plugin-react";
 import { defineConfig, externalizeDepsPlugin } from "electron-vite";
 import pluginExternal from "vite-plugin-external";
++import babel from '@rolldown/plugin-babel'
 
 export default defineConfig({
   // main process has full access to Node.js APIs
@@ -24,9 +25,8 @@ export default defineConfig({
       sourcemap: true,
     },
     plugins: [
-      react({
-        babel: {},
-      }),
+      react(),
+      babel(),
       externalizeDepsPlugin({
         // do not bundle modules provided by the host app
         include: ["@freelensapp/extensions"],
@@ -66,9 +66,8 @@ export default defineConfig({
       },
     },
     plugins: [
-      react({
-        babel: {},
-      }),
+      react(),
+      babel(),
       externalizeDepsPlugin({
         // do not bundle modules provided by the host app
         include: [
