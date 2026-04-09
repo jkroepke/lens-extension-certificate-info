@@ -68,7 +68,7 @@
     "electron-vite": "^5.0.0",
     "react": "17.0.2",
     "typescript": "6.0.2",
-    "vite": "^8.0.5",
+    "vite": "^8.0.8",
     "vite-plugin-external": "^6.2.2"
   },
   "license": "MIT",
