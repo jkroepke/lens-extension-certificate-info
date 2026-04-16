@@ -60,7 +60,7 @@ lint:
   enabled:
     - oxipng@10.1.0
     - actionlint@1.7.12
-    - biome@2.4.11! # datasource=npm depName=@biomejs/biome
+    - biome@2.4.12! # datasource=npm depName=@biomejs/biome
     - git-diff-check
     - markdownlint@0.48.0
     - prettier@3.8.2! # datasource=npm depName=prettier
