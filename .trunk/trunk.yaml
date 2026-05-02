@@ -58,7 +58,7 @@ lint:
       files:
         - sass
   enabled:
-    - grype@0.111.1
+    - grype@0.112.0
     - oxipng@10.1.1
     - actionlint@1.7.12
     - biome@2.4.13! # datasource=npm depName=@biomejs/biome
