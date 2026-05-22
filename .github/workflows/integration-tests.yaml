@@ -95,13 +95,16 @@ jobs:
           package-manager-cache: false
 
       - name: Get Electron version
-        run: echo "electron_version=$(yq -r .importers.freelens.devDependencies.electron.version freelens/pnpm-lock.yaml | sed 's/(.*)//')" >> $GITHUB_ENV
+        run: echo "electron_version=$(yq -r .importers.freelens.devDependencies.electron.version freelens/pnpm-lock.yaml |
+          sed 's/(.*)//')" >> $GITHUB_ENV
 
       - name: Get Electron Builder version
-        run: echo "electron_builder_version=$(yq -r .importers.freelens.devDependencies.electron-builder.version freelens/pnpm-lock.yaml | sed 's/(.*)//')" >> $GITHUB_ENV
+        run: echo "electron_builder_version=$(yq -r .importers.freelens.devDependencies.electron-builder.version freelens/pnpm-lock.yaml
+          | sed 's/(.*)//')" >> $GITHUB_ENV
 
       - name: Get Playwright version
-        run: echo "playwright_version=$(yq -r .importers.freelens.devDependencies.playwright.version freelens/pnpm-lock.yaml | sed 's/(.*)//')" >> $GITHUB_ENV
+        run: echo "playwright_version=$(yq -r .importers.freelens.devDependencies.playwright.version freelens/pnpm-lock.yaml
+          | sed 's/(.*)//')" >> $GITHUB_ENV
 
       - name: Use Electron cache
         uses: actions/cache@v5
@@ -139,7 +142,8 @@ jobs:
         uses: actions/cache@v5
         with:
           path: ${{ env.TURBOREPO_CACHE }}
-          key: ubuntu-22.04-x64-turborepo-${{ hashFiles('freelens/**/package.json', 'freelens/**/pnpm-lock.yaml', 'freelens/turbo.json') }}
+          key: ubuntu-22.04-x64-turborepo-${{ hashFiles('freelens/**/package.json', 'freelens/**/pnpm-lock.yaml', 'freelens/turbo.json')
+            }}
           restore-keys: |
             ubuntu-22.04-x64-turborepo-
 
