@@ -52,7 +52,7 @@ jobs:
         if: steps.check-version.outputs.is_release == 'true'
         id: app-token
         with:
-          app-id: 1248576
+          client-id: 1248576
           private-key: ${{ secrets.AUTOMATION_APP_PRIVATE_KEY }}
 
       - name: Create tag from the main branch
