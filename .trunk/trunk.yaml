@@ -58,7 +58,7 @@ lint:
       files:
         - sass
   enabled:
-    - pinact@4.0.0
+    - pinact@4.1.0
     - grype@0.114.0
     - oxipng@10.1.1
     - actionlint@1.7.12
