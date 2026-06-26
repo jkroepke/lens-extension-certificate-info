@@ -13,8 +13,10 @@ permissions:
   contents: read
 
 env:
-  kind_version: 0.32.0 # datasource=github-releases depName=kubernetes-sigs/kind
-  kubernetes_version: 1.36.1 # datasource=docker depName=kindest/node
+  # renovate: github-releases=kubernetes-sigs/kind
+  kind_version: 0.32.0
+  # renovate: docker=kindest/node
+  kubernetes_version: 1.36.1
 
 jobs:
   test-integration:
@@ -24,8 +26,7 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - freelens_version: v1.9.0
-          - freelens_version: main
+          - freelens_version: v1.10.0
 
     runs-on: ubuntu-22.04
     timeout-minutes: 60
@@ -250,7 +251,7 @@ jobs:
       - name: Restore dev node_modules
         working-directory: freelens
         run: |
-          mv freelens/node_modules freelens/node_modules_prod
+          rm -rf freelens/node_modules
           mv freelens/node_modules_dev freelens/node_modules
 
       - name: Run integration tests

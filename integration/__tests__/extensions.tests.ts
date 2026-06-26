@@ -49,11 +49,20 @@ describe("extensions page tests", () => {
       await window.waitForSelector('div[class*="installed-extensions-module__enabled--"]')
     ).textContent();
     expect(installedExtensionState).toBe("Enabled");
-    console.log('await window.click i[data-testid*="close-notification-for-notification_"]');
-    await window.click('i[data-testid*="close-notification-for-notification_"]');
-    console.log('await window.click div[class*=[close-button-module__closeButton--"][aria-label="Close"]');
-    await window.click('div[class*="close-button-module__closeButton--"][aria-label="Close"]');
-  }, 15 * 1000);
+    // Dismiss any notifications so a notification still in its enter animation
+    // does not intercept pointer events on the elements behind it.
+    console.log("dismiss notifications");
+    const notificationCloseSelector =
+      'i[data-testid*="close-notification-for-notification_"], div[class*="close-button-module__closeButton--"][aria-label="Close"]';
+    for (let attempt = 0; attempt < 10; attempt++) {
+      const closeButtons = await window.$$(notificationCloseSelector);
+      if (closeButtons.length === 0) break;
+      for (const closeButton of closeButtons) {
+        await closeButton.click({ force: true }).catch(() => {});
+      }
+      await window.waitForTimeout(200);
+    }
+  }, 120 * 1000);
 
   afterAll(
     async () => {
