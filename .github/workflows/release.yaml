@@ -9,17 +9,9 @@ permissions: {}
 
 jobs:
   release:
-    name: release on ${{ matrix.os }}
+    name: release
 
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - os: ubuntu-22.04
-            arch: x64
-            ref: main
-
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-24.04-arm
     environment: publishing
 
     env:

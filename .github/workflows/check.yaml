@@ -14,16 +14,9 @@ permissions:
 
 jobs:
   knip:
-    name: check on ${{ matrix.os }}
+    name: check
 
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - os: ubuntu-22.04
-            arch: x64
-
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-24.04-arm
     timeout-minutes: 60
 
     steps:

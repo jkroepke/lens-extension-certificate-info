@@ -15,23 +15,16 @@ permissions:
 
 jobs:
   npm-dedupe:
+
     name: npm dedupe
 
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - os: ubuntu-22.04
-            arch: x64
-
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-24.04-arm
     environment: automated
     timeout-minutes: 10
 
     if: >-
       github.event_name != 'issue_comment' || (startsWith(github.event.issue.title, 'Automated npm dedupe') && contains(github.event.comment.body,
-      '/rerun'))
-
+      '/rerun')) #magic___^_^___line
     steps:
       - uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
         id: app-token
