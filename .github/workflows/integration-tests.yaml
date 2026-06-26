@@ -20,7 +20,7 @@ env:
 
 jobs:
   test-integration:
-    name: "integration tests with Freelens"
+    name: "integration tests with Freelens ${{ matrix.freelens_version == 'main' && 'main' || ''}}"
 
     strategy:
       fail-fast: false
