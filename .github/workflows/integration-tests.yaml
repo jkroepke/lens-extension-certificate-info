@@ -55,7 +55,7 @@ jobs:
         run: echo "pnpm_cache_dir=$(pnpm store path)" >> ${GITHUB_ENV}
 
       - name: Use pnpm cache
-        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
+        uses: actions/cache@2c8a9bd7457de244a408f35966fab2fb45fda9c8 # v6.0.0
         with:
           path: ${{ env.pnpm_cache_dir }}
           key: node-freelens-${{ matrix.freelens_version }}-${{ hashFiles('pnpm-lock.yaml') }}
@@ -107,7 +107,7 @@ jobs:
           | sed 's/(.*)//')" >> $GITHUB_ENV
 
       - name: Use Electron cache
-        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
+        uses: actions/cache@2c8a9bd7457de244a408f35966fab2fb45fda9c8 # v6.0.0
         with:
           path: ${{ env.ELECTRON_CACHE }}
           key: ubuntu-22.04-x64-electron-${{ env.electron_version }}
@@ -115,7 +115,7 @@ jobs:
             ubuntu-22.04-x64-electron-
 
       - name: Use Electron Builder cache
-        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
+        uses: actions/cache@2c8a9bd7457de244a408f35966fab2fb45fda9c8 # v6.0.0
         with:
           path: ${{ env.ELECTRON_BUILDER_CACHE }}
           key: ubuntu-22.04-x64-electron-builder-${{ env.electron_builder_version }}
@@ -124,14 +124,14 @@ jobs:
 
       - name: Use Electron headers cache
         id: electron-headers
-        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
+        uses: actions/cache@2c8a9bd7457de244a408f35966fab2fb45fda9c8 # v6.0.0
         with:
           path: ${{ env.ELECTRON_HEADERS_CACHE }}
           key: electron-headers-${{ env.electron_version }}
 
       - name: Use Playwright cache
         id: playwright-cache
-        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
+        uses: actions/cache@2c8a9bd7457de244a408f35966fab2fb45fda9c8 # v6.0.0
         with:
           path: ${{ env.PLAYWRIGHT_BROWSERS_PATH }}
           key: ubuntu-22.04-x64-playwright-${{ env.playwright_version }}
@@ -139,7 +139,7 @@ jobs:
             ubuntu-22.04-x64-playwright-
 
       - name: Use Turborepo cache
-        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
+        uses: actions/cache@2c8a9bd7457de244a408f35966fab2fb45fda9c8 # v6.0.0
         with:
           path: ${{ env.TURBOREPO_CACHE }}
           key: ubuntu-22.04-x64-turborepo-${{ hashFiles('freelens/**/package.json', 'freelens/**/pnpm-lock.yaml', 'freelens/turbo.json')
