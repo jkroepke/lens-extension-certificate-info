@@ -111,17 +111,17 @@ jobs:
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: ${{ env.ELECTRON_CACHE }}
-          key: ubuntu-22.04-x64-electron-${{ env.electron_version }}
+          key: ubuntu-24.04-arm-electron-${{ env.electron_version }}
           restore-keys: |
-            ubuntu-22.04-x64-electron-
+            ubuntu-24.04-arm-electron-
 
       - name: Use Electron Builder cache
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: ${{ env.ELECTRON_BUILDER_CACHE }}
-          key: ubuntu-22.04-x64-electron-builder-${{ env.electron_builder_version }}
+          key: ubuntu-24.04-arm-electron-builder-${{ env.electron_builder_version }}
           restore-keys: |
-            ubuntu-22.04-x64-electron-builder-
+            ubuntu-24.04-arm-electron-builder-
 
       - name: Use Electron headers cache
         id: electron-headers
@@ -135,18 +135,18 @@ jobs:
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: ${{ env.PLAYWRIGHT_BROWSERS_PATH }}
-          key: ubuntu-22.04-x64-playwright-${{ env.playwright_version }}
+          key: ubuntu-24.04-arm-playwright-${{ env.playwright_version }}
           restore-keys: |
-            ubuntu-22.04-x64-playwright-
+            ubuntu-24.04-arm-playwright-
 
       - name: Use Turborepo cache
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: ${{ env.TURBOREPO_CACHE }}
-          key: ubuntu-22.04-x64-turborepo-${{ hashFiles('freelens/**/package.json', 'freelens/**/pnpm-lock.yaml', 'freelens/turbo.json')
+          key: ubuntu-24.04-arm-turborepo-${{ hashFiles('freelens/**/package.json', 'freelens/**/pnpm-lock.yaml', 'freelens/turbo.json')
             }}
           restore-keys: |
-            ubuntu-22.04-x64-turborepo-
+            ubuntu-24.04-arm-turborepo-
 
       - name: Delete node packages from the previous build to avoid issues with pnpm
         run: rm -rf pnpm-lock.yaml node_modules
