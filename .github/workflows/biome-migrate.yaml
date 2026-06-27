@@ -64,12 +64,12 @@ jobs:
 
       - name: Install pnpm dependencies
         id: install-pnpm
-        run: timeout 300 pnpm install --color=always --prefer-offline --frozen-lockfile
+        run: timeout 300 pnpm install --color=always --prefer-offline --frozen-lockfile --dangerously-allow-all-builds
         continue-on-error: true
 
       - name: Install pnpm dependencies (retry)
         if: steps.install-pnpm.outcome == 'failure'
-        run: timeout 300 pnpm install --color=always --prefer-offline --frozen-lockfile
+        run: timeout 300 pnpm install --color=always --prefer-offline --frozen-lockfile --dangerously-allow-all-builds
 
       - name: Run biome migrate
         run: |

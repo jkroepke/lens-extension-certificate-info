@@ -57,13 +57,13 @@ jobs:
       - name: Install pnpm dependencies
         id: install-pnpm
         shell: bash
-        run: pnpm install --color=always --prefer-offline --frozen-lockfile
+        run: pnpm install --color=always --prefer-offline --frozen-lockfile --dangerously-allow-all-builds
         continue-on-error: true
 
       - name: Install pnpm dependencies (retry)
         if: steps.install-pnpm.outcome == 'failure'
         shell: bash
-        run: pnpm install --color=always --prefer-offline --frozen-lockfile
+        run: pnpm install --color=always --prefer-offline --frozen-lockfile --dangerously-allow-all-builds
 
       - name: Build packages
         run: pnpm --color=always --stream build
