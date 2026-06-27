@@ -65,12 +65,12 @@ jobs:
 
       - name: Install pnpm dependencies for extension
         id: install-pnpm-extension
-        run: timeout 300 pnpm install --color=always --prefer-offline --frozen-lockfile
+        run: timeout 300 pnpm install --color=always --prefer-offline --frozen-lockfile --dangerously-allow-all-builds
         continue-on-error: true
 
       - name: Install pnpm dependencies for extension (retry)
         if: steps.install-pnpm-extension.outcome == 'failure'
-        run: timeout 300 pnpm install --color=always --prefer-offline --frozen-lockfile
+        run: timeout 300 pnpm install --color=always --prefer-offline --frozen-lockfile --dangerously-allow-all-builds
 
       - name: Build plugin
         id: build-plugin
@@ -179,7 +179,7 @@ jobs:
           PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: "1"
 
       - name: Disable pre post scripts for pnpm
-        run: pnpm config set enablePrePostScripts false
+        run: echo "pnpm_config_enable_pre_post_scripts=false" >> "$GITHUB_ENV"
 
       - name: Install Electron headers
         if: steps.electron-headers.outputs.cache-hit != 'true'
