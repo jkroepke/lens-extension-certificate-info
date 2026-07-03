@@ -139,7 +139,7 @@ export class SecretDetails extends React.Component<Renderer.Component.KubeObject
     const { object } = this.props;
 
     if (!object || !object.data) {
-      return;
+      return null;
     }
 
     const secretKeys = object.getKeys();

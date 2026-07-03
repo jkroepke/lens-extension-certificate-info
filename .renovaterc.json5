@@ -37,6 +37,13 @@
     "react-router-dom",
   ],
   "packageRules": [
+    // group all @freelensapp/* updates into one PR
+    {
+      "matchPackageNames": [
+        "@freelensapp/**"
+      ],
+      "groupName": "freelensapp"
+    },
     // peerDependencies are widen
     {
       "matchDepTypes": [
@@ -55,6 +62,14 @@
         "major"
       ],
       "enabled": false
+    },
+    // @testing-library/react v13+ drops React 17 support (requires react-dom/client
+    // from React 18+); this extension must stay on React 17 to match the Freelens host
+    {
+      "matchDepNames": [
+        "@testing-library/react",
+      ],
+      "allowedVersions": "<13"
     },
     // patch updates only
     {

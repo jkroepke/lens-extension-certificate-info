@@ -1,10 +1,16 @@
 {
   "$schema": "https://unpkg.com/knip@5/schema-jsonc.json",
 
-  "entry": ["out/{main,preload}/index.js!", "src/main/index.ts", "src/renderer/index.tsx"],
+  "entry": [
+    "out/{main,preload}/index.js!",
+    "src/main/index.ts",
+    "src/renderer/index.tsx",
+    "src/**/*.{test,spec}.{ts,tsx}",
+    "test/**/*.{ts,tsx}"
+  ],
   "project": ["*.{js,mjs,ts}", "out/**/*.js!", "src/**/*.{ts,tsx}"],
 
-  "ignoreBinaries": ["jq", "electron-rebuild"],
+  "ignoreBinaries": ["yq", "electron-rebuild"],
 
   "typescript": {
     "config": ["tsconfig.json"]
