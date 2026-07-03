@@ -39,10 +39,10 @@ jobs:
 
     steps:
       - name: Checkout plugin
-        uses: actions/checkout@v7
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
 
       - name: Setup node
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
         with:
           node-version-file: .nvmrc
           package-manager-cache: false
@@ -54,7 +54,7 @@ jobs:
         run: echo "pnpm_cache_dir=$(pnpm store path)" >> ${GITHUB_ENV}
 
       - name: Use pnpm cache
-        uses: actions/cache@v6
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: ${{ env.pnpm_cache_dir }}
           key: node-freelens-${{ matrix.freelens_version }}-${{ hashFiles('pnpm-lock.yaml') }}
@@ -93,14 +93,14 @@ jobs:
 
       - name: Checkout app
         if: matrix.freelens_version != 'latest'
-        uses: actions/checkout@v7
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
         with:
           repository: freelensapp/freelens
           ref: ${{ matrix.freelens_version }}
           path: freelens
 
       - name: Setup node
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
         with:
           node-version-file: freelens/.nvmrc
           package-manager-cache: false
@@ -118,7 +118,7 @@ jobs:
           | sed 's/(.*)//')" >> $GITHUB_ENV
 
       - name: Use Electron cache
-        uses: actions/cache@v6
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: ${{ env.ELECTRON_CACHE }}
           key: ubuntu-24.04-arm-electron-${{ env.electron_version }}
@@ -126,7 +126,7 @@ jobs:
             ubuntu-24.04-arm-electron-
 
       - name: Use Electron Builder cache
-        uses: actions/cache@v6
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: ${{ env.ELECTRON_BUILDER_CACHE }}
           key: ubuntu-24.04-arm-electron-builder-${{ env.electron_builder_version }}
@@ -135,14 +135,14 @@ jobs:
 
       - name: Use Electron headers cache
         id: electron-headers
-        uses: actions/cache@v6
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: ${{ env.ELECTRON_HEADERS_CACHE }}
           key: electron-headers-${{ env.electron_version }}
 
       - name: Use Playwright cache
         id: playwright-cache
-        uses: actions/cache@v6
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: ${{ env.PLAYWRIGHT_BROWSERS_PATH }}
           key: ubuntu-24.04-arm-playwright-${{ env.playwright_version }}
@@ -150,7 +150,7 @@ jobs:
             ubuntu-24.04-arm-playwright-
 
       - name: Use Turborepo cache
-        uses: actions/cache@v6
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: ${{ env.TURBOREPO_CACHE }}
           key: ubuntu-24.04-arm-turborepo-${{ hashFiles('freelens/**/package.json', 'freelens/**/pnpm-lock.yaml', 'freelens/turbo.json')
@@ -169,7 +169,7 @@ jobs:
       # poisons the cache with an incomplete dist.
       - name: Restore Electron build cache
         id: electron-build-cache
-        uses: actions/cache/restore@v6
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: freelens/freelens/dist
           key: ubuntu-24.04-arm-electron-dist-${{ matrix.freelens_version }}-${{ env.electron_version }}-${{ env.electron_builder_version
@@ -225,7 +225,7 @@ jobs:
 
       - name: Start KinD cluster (Linux)
         if: runner.os == 'Linux'
-        uses: helm/kind-action@v1
+        uses: helm/kind-action@ef37e7f390d99f746eb8b610417061a60e82a6cc # v1.14.0
         with:
           cluster_name: freelens
           version: v${{ env.kind_version }}
@@ -286,7 +286,7 @@ jobs:
       # dist directory.
       - name: Save Electron build cache
         if: steps.electron-build-cache.outputs.cache-hit != 'true'
-        uses: actions/cache/save@v6
+        uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: freelens/freelens/dist
           key: ${{ steps.electron-build-cache.outputs.cache-primary-key }}
