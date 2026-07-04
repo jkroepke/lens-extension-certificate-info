@@ -2,25 +2,55 @@ import { Renderer } from "@freelensapp/extensions";
 import { X509Certificate } from "crypto";
 import React from "react";
 
+type CertificateInfo = {
+  subject: string;
+  issuer: string;
+  subjectAltName: string | undefined;
+  serialNumber: string;
+  validFrom: string;
+  validTo: string;
+  keyType: string;
+  selfSigned: boolean;
+};
+
 export class SecretDetails extends React.Component<Renderer.Component.KubeObjectDetailsProps<Renderer.K8sApi.Secret>> {
-  formatDate(dateString: string) {
+  private daysBetween(date: Date, now = new Date()): number {
+    return Math.ceil((date.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
+  }
+
+  formatExpireDate(dateString: string) {
     const date = new Date(dateString);
     const now = new Date();
     const color = now > date ? "red" : undefined;
-
-    const diffInMs = date.getTime() - now.getTime();
-    const diffInDays = Math.ceil(diffInMs / (1000 * 60 * 60 * 24));
+    const diffInDays = this.daysBetween(date, now);
+    const validityText = diffInDays < 0 ? `Expired ${Math.abs(diffInDays)} days ago` : `Expires in ${diffInDays} days`;
 
     return (
       <span style={{ color }}>
-        {dateString} <i>(Valid: {diffInDays} days)</i>
+        {dateString} <i>({validityText})</i>
       </span>
     );
   }
 
-  formatSAN(subjectaltname: string | undefined) {
-    return subjectaltname?.split(/, /).map((s) => (
-      <React.Fragment>
+  formatNotBefore(dateString: string) {
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffInDays = this.daysBetween(date, now);
+
+    if (diffInDays <= 0) {
+      return dateString;
+    }
+
+    return (
+      <span style={{ color: "red" }}>
+        {dateString} <i>(Not valid yet, starts in {diffInDays} days)</i>
+      </span>
+    );
+  }
+
+  formatSAN(subjectAltName: string | undefined) {
+    return subjectAltName?.split(/, /).map((s, i) => (
+      <React.Fragment key={`${s}-${i}`}>
         {s}
         <br />
       </React.Fragment>
@@ -119,7 +149,7 @@ export class SecretDetails extends React.Component<Renderer.Component.KubeObject
     }
   }
 
-  parseCertificate(certificateString: string) {
+  parseCertificate(certificateString: string): CertificateInfo | null {
     try {
       const cert = new X509Certificate(certificateString);
 
@@ -129,10 +159,10 @@ export class SecretDetails extends React.Component<Renderer.Component.KubeObject
       return {
         subject: cert.subject,
         issuer: cert.issuer,
-        subjectaltname: san,
+        subjectAltName: san,
         serialNumber: cert.serialNumber,
-        valid_from: cert.validFrom,
-        valid_to: cert.validTo,
+        validFrom: cert.validFrom,
+        validTo: cert.validTo,
         keyType: this.getKeyType(cert),
         selfSigned: this.isSelfSigned(cert),
       };
@@ -151,7 +181,7 @@ export class SecretDetails extends React.Component<Renderer.Component.KubeObject
 
     const secretKeys = object.getKeys();
     const secretData = object.data;
-    const certificates: any[] = [];
+    const certificates: React.ReactNode[] = [];
 
     for (const key of secretKeys) {
       if (!secretData[key] || !secretData[key].startsWith("LS0tLS1CRUdJTi")) {
@@ -173,16 +203,18 @@ export class SecretDetails extends React.Component<Renderer.Component.KubeObject
               </Renderer.Component.DrawerTitle>
               <Renderer.Component.DrawerItem name="Subject">{cert.subject}</Renderer.Component.DrawerItem>
               <Renderer.Component.DrawerItem name="SAN">
-                {this.formatSAN(cert.subjectaltname)}
+                {this.formatSAN(cert.subjectAltName)}
               </Renderer.Component.DrawerItem>
               <Renderer.Component.DrawerItem name="Key Type">{cert.keyType}</Renderer.Component.DrawerItem>
               <Renderer.Component.DrawerItem name="Serial Number">{cert.serialNumber}</Renderer.Component.DrawerItem>
               <Renderer.Component.DrawerItem name="Issuer">
                 {this.formatIssuer(cert.issuer, cert.selfSigned)}
               </Renderer.Component.DrawerItem>
-              <Renderer.Component.DrawerItem name="Not before">{cert.valid_from}</Renderer.Component.DrawerItem>
+              <Renderer.Component.DrawerItem name="Not before">
+                {this.formatNotBefore(cert.validFrom)}
+              </Renderer.Component.DrawerItem>
               <Renderer.Component.DrawerItem name="Expires">
-                {this.formatDate(cert.valid_to)}
+                {this.formatExpireDate(cert.validTo)}
               </Renderer.Component.DrawerItem>
             </div>,
           );

@@ -8,13 +8,13 @@
 
 ⭐ Don't forget to star this repository! ⭐
 
-See expire date from certificates inside kubernetes secrets.
+Show certificate metadata and expiry dates for certificates inside Kubernetes secrets.
 
 ![Certificate details in secrets overview](docs/secrets.png)
 
-Only PEM formatted single certificated are supported yet.
+Only PEM-formatted certificate blocks are supported.
 
-Pull request for more supported formats like Java Keystore, PKCS#12 are welcome.
+Pull requests for more formats like Java Keystore or PKCS#12 are welcome.
 
 ## Compatibility
 
@@ -25,7 +25,7 @@ Pull request for more supported formats like Java Keystore, PKCS#12 are welcome.
 
 ## Installation
 
-### Direct link to Lens
+### Direct install link
 
 [lens://app/extensions/install/lens-certificate-info](lens://app/extensions/install/lens-certificate-info)
 

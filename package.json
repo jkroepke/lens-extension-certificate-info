@@ -7,7 +7,7 @@
     "url": "https://github.com/jkroepke"
   },
   "publisher": "jkroepke",
-  "description": "Lens extension get infos from certificates inside secrets.",
+  "description": "Freelens extension that shows certificate metadata from Kubernetes secrets.",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/jkroepke/lens-extension-certificate-info.git",
