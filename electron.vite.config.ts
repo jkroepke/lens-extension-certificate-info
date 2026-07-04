@@ -1,7 +1,14 @@
+import { builtinModules } from "node:module";
 import { resolve } from "node:path";
 import react from "@vitejs/plugin-react";
-import { defineConfig, externalizeDepsPlugin } from "electron-vite";
-import pluginExternal from "vite-plugin-external";
+import { defineConfig } from "electron-vite";
+import { globalExternals } from "./build/global-externals.mjs";
+
+// Modules provided by the Node.js/Electron runtime in the Freelens host. They
+// must stay external (left as `require(...)`) instead of being bundled. We list
+// them explicitly because setting `rolldownOptions` opts out of the
+// `rollupOptions.external` that electron-vite would otherwise apply.
+const runtimeExternals = ["electron", /^electron\//, ...builtinModules, ...builtinModules.map((m) => `node:${m}`)];
 
 export default defineConfig({
   // main process has full access to Node.js APIs
@@ -13,6 +20,7 @@ export default defineConfig({
         formats: ["cjs"],
       },
       rolldownOptions: {
+        external: runtimeExternals,
         output: {
           // silence warning about using `chunk.default` to access the default export
           exports: "named",
@@ -25,15 +33,10 @@ export default defineConfig({
     },
     plugins: [
       react(),
-      externalizeDepsPlugin({
-        // do not bundle modules provided by the host app
-        include: ["@freelensapp/extensions"],
-      }),
-      pluginExternal({
+      globalExternals({
         // the modules are provided by the host app as a global variable
-        externals: {
-          "@freelensapp/extensions": "global.LensExtensions",
-        },
+        "@freelensapp/extensions": "global.LensExtensions",
+        mobx: "global.Mobx",
       }),
     ],
   },
@@ -48,6 +51,7 @@ export default defineConfig({
       },
       outDir: "out/renderer",
       rolldownOptions: {
+        external: runtimeExternals,
         output: {
           // silence warning about using `chunk.default` to access the default export
           exports: "named",
@@ -65,31 +69,15 @@ export default defineConfig({
     },
     plugins: [
       react(),
-      externalizeDepsPlugin({
-        // do not bundle modules provided by the host app
-        include: [
-          "@freelensapp/extensions",
-          "electron",
-          "mobx",
-          "mobx-react",
-          "react",
-          "react-dom",
-          "react-router-dom",
-        ],
-        // bundle all other modules
-        exclude: [],
-      }),
-      pluginExternal({
+      globalExternals({
         // the modules are provided by the host app as a global variable
-        externals: {
-          "@freelensapp/extensions": "global.LensExtensions",
-          mobx: "global.Mobx",
-          "mobx-react": "global.MobxReact",
-          react: "global.React",
-          "react-dom": "global.ReactDom",
-          "react-router-dom": "global.ReactRouterDom",
-          "react/jsx-runtime": "global.ReactJsxRuntime",
-        },
+        "@freelensapp/extensions": "global.LensExtensions",
+        mobx: "global.Mobx",
+        "mobx-react": "global.MobxReact",
+        react: "global.React",
+        "react-dom": "global.ReactDom",
+        "react-router-dom": "global.ReactRouterDom",
+        "react/jsx-runtime": "global.ReactJsxRuntime",
       }),
     ],
   },
