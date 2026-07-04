@@ -1,5 +1,5 @@
 [![Check](https://github.com/jkroepke/lens-extension-certificate-info/actions/workflows/check.yaml/badge.svg)](https://github.com/jkroepke/lens-extension-certificate-info/actions/workflows/check.yaml)
-[![GitHub license](https://img.shields.io/github/license/jkroepke/lens-extension-certificate-info)](https://github.com/jkroepke/lens-extension-certificate-info/blob/main/LICENSE.txt)
+[![GitHub license](https://img.shields.io/github/license/jkroepke/lens-extension-certificate-info)](https://github.com/jkroepke/lens-extension-certificate-info/blob/main/LICENSE)
 [![GitHub package.json version](https://img.shields.io/github/package-json/v/jkroepke/lens-extension-certificate-info?logo=github)](https://www.npmjs.com/package/lens-certificate-info)
 [![GitHub all releases](https://img.shields.io/github/downloads/jkroepke/lens-extension-certificate-info/total?logo=github)](https://github.com/jkroepke/lens-extension-certificate-info/releases/latest)
 [![npm](https://img.shields.io/npm/dm/lens-certificate-info?logo=npm)](https://www.npmjs.com/package/lens-certificate-info)

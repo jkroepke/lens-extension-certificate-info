@@ -65,4 +65,13 @@ describe("SecretDetails", () => {
 
     expect(container.textContent).toBe("");
   });
+
+  it("does not infer self-signed status from matching common names alone", () => {
+    const details = new SecretDetails({ object: createSecret({}) });
+    const issuer = "CN=Example CA";
+
+    const { container } = render(<>{details.formatIssuer(issuer, false)}</>);
+
+    expect(container.textContent).toBe("Example CA");
+  });
 });

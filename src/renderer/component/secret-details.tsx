@@ -6,13 +6,13 @@ export class SecretDetails extends React.Component<Renderer.Component.KubeObject
   formatDate(dateString: string) {
     const date = new Date(dateString);
     const now = new Date();
-    const color = now > date ? "red" : "";
+    const color = now > date ? "red" : undefined;
 
     const diffInMs = date.getTime() - now.getTime();
     const diffInDays = Math.ceil(diffInMs / (1000 * 60 * 60 * 24));
 
     return (
-      <span color={color}>
+      <span style={{ color }}>
         {dateString} <i>(Valid: {diffInDays} days)</i>
       </span>
     );
@@ -37,7 +37,7 @@ export class SecretDetails extends React.Component<Renderer.Component.KubeObject
     return cnMatch ? cnMatch[1].trim() : distinguishedName;
   }
 
-  formatIssuer(issuer: string, subject: string) {
+  formatIssuer(issuer: string, selfSigned: boolean) {
     const issuerCN = this.extractCN(issuer);
 
     if (typeof issuerCN === "undefined") {
@@ -46,13 +46,6 @@ export class SecretDetails extends React.Component<Renderer.Component.KubeObject
           <i>No issuer</i>
         </React.Fragment>
       );
-    }
-
-    let selfSigned = issuer === subject;
-
-    if (!selfSigned) {
-      // More precise self-signed detection
-      selfSigned = this.extractCN(subject) === issuerCN;
     }
 
     if (selfSigned) {
@@ -113,6 +106,19 @@ export class SecretDetails extends React.Component<Renderer.Component.KubeObject
     }
   }
 
+  private isSelfSigned(cert: X509Certificate): boolean {
+    if (cert.issuer !== cert.subject) {
+      return false;
+    }
+
+    try {
+      return cert.verify(cert.publicKey);
+    } catch (error) {
+      console.error("Error verifying certificate signature:", error);
+      return false;
+    }
+  }
+
   parseCertificate(certificateString: string) {
     try {
       const cert = new X509Certificate(certificateString);
@@ -128,6 +134,7 @@ export class SecretDetails extends React.Component<Renderer.Component.KubeObject
         valid_from: cert.validFrom,
         valid_to: cert.validTo,
         keyType: this.getKeyType(cert),
+        selfSigned: this.isSelfSigned(cert),
       };
     } catch (error) {
       console.error("Error parsing certificate:", error);
@@ -171,7 +178,7 @@ export class SecretDetails extends React.Component<Renderer.Component.KubeObject
               <Renderer.Component.DrawerItem name="Key Type">{cert.keyType}</Renderer.Component.DrawerItem>
               <Renderer.Component.DrawerItem name="Serial Number">{cert.serialNumber}</Renderer.Component.DrawerItem>
               <Renderer.Component.DrawerItem name="Issuer">
-                {this.formatIssuer(cert.issuer, cert.subject)}
+                {this.formatIssuer(cert.issuer, cert.selfSigned)}
               </Renderer.Component.DrawerItem>
               <Renderer.Component.DrawerItem name="Not before">{cert.valid_from}</Renderer.Component.DrawerItem>
               <Renderer.Component.DrawerItem name="Expires">

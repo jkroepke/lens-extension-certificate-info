@@ -77,7 +77,7 @@
     "vite-plugin-external": "^6.2.2",
     "vitest": "^4.1.9"
   },
-  "license": "MIT",
+  "license": "Apache-2.0",
   "homepage": "https://github.com/jkroepke/lens-extension-certificate-info",
   "bugs": {
     "url": "https://github.com/jkroepke/lens-extension-certificate-info/issues"
