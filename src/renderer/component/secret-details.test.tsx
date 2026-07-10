@@ -121,7 +121,7 @@ describe("SecretDetails", () => {
     const expired = new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toUTCString();
     const notBefore = new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toUTCString();
 
-    const { rerender } = render(<>{details.formatDate(expired)}</>);
+    const { rerender } = render(<>{details.formatExpireDate(expired)}</>);
     expect(screen.getByText(/\(Expired \d+ days ago\)/)).toBeDefined();
 
     rerender(<>{details.formatNotBefore(notBefore)}</>);
