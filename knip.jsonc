@@ -11,6 +11,9 @@
   "project": ["*.{js,mjs,ts}", "out/**/*.js!", "src/**/*.{ts,tsx}"],
 
   "ignoreBinaries": ["yq", "electron-rebuild"],
+  "ignoreDependencies": [
+    "@freelensapp/extensions"
+  ],
 
   "typescript": {
     "config": ["tsconfig.json"]
