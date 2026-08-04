@@ -54,7 +54,7 @@ lint:
           run_from: ${root_or_parent_with(biome.jsonc)}
       run_timeout: 1m
   enabled:
-    - oxlint@1.76.0
+    - oxlint@1.77.0
     - actionlint@1.7.12
     - biome@2.5.6! # datasource=npm depName=@biomejs/biome
     - git-diff-check
@@ -81,4 +81,4 @@ actions:
     - trunk-upgrade-available
 tools:
   enabled:
-    - oxfmt@0.61.0
+    - oxfmt@0.62.0
