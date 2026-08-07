@@ -17,6 +17,11 @@ runtimes:
     - python@3.14.4
 # This is the section where you manage your linters. (https://docs.trunk.io/check/configuration)
 lint:
+  ignore:
+    - linters:
+        - biome
+      paths:
+        - build/**
   definitions:
     # See https://github.com/trunk-io/plugins/pull/1063
     - name: biome
@@ -54,7 +59,6 @@ lint:
           run_from: ${root_or_parent_with(biome.jsonc)}
       run_timeout: 1m
   enabled:
-    - oxlint@1.77.0
     - actionlint@1.7.12
     - biome@2.5.6! # datasource=npm depName=@biomejs/biome
     - git-diff-check
@@ -68,6 +72,7 @@ lint:
     - eslint
     - grype
     - osv-scanner
+    - oxlint
     - oxipng
     - pinact
     - prettier
@@ -79,6 +84,3 @@ actions:
     - trunk-check-pre-push
     - trunk-fmt-pre-commit
     - trunk-upgrade-available
-tools:
-  enabled:
-    - oxfmt@0.62.0
