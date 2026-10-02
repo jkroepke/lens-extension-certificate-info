@@ -203,8 +203,8 @@ importers:
         specifier: ^8.3.1
         version: 8.3.1(@types/node@22.15.35)(esbuild@0.27.2)(less@4.4.0)(sass-embedded@1.100.0)(sass@1.100.0)(stylus@0.62.0(supports-color@8.1.1))
       vitest:
-        specifier: ^5.0.1
-        version: 5.0.1(@types/node@22.15.35)(jsdom@30.1.1)(vite@8.3.1(@types/node@22.15.35)(esbuild@0.27.2)(less@4.4.0)(sass-embedded@1.100.0)(sass@1.100.0)(stylus@0.62.0(supports-color@8.1.1)))
+        specifier: ^5.0.2
+        version: 5.0.3(@types/node@22.15.35)(jsdom@30.1.1)(vite@8.3.1(@types/node@22.15.35)(esbuild@0.27.2)(less@4.4.0)(sass-embedded@1.100.0)(sass@1.100.0)(stylus@0.62.0(supports-color@8.1.1)))
 
 packages:
 
@@ -1544,8 +1544,8 @@ packages:
       oxc-transform-react:
         optional: true
 
-  '@vitest/mocker@5.0.1':
-    resolution: {integrity: sha512-6K1DoBNAPGvuOcSsGA4D6x+5zEEff/KmOOP3uetT2TrGpVfI+HRHRnJJfKi5ib/g1vx8IYHQD8s0pbJz8WQI7Q==}
+  '@vitest/mocker@5.0.3':
+    resolution: {integrity: sha512-T8sWAIbkSyAjkwTcaEc3Iu0o9A27X1/kdXrizhZkGuSKScRQtRzclfAMpOTcGdXCsqxeWlpGy3XjqaW8CpLORg==}
     peerDependencies:
       msw: ^2.4.9
       vite: ^6.0.0 || ^7.0.0 || ^8.0.0
@@ -1555,8 +1555,8 @@ packages:
       vite:
         optional: true
 
-  '@vitest/spy@5.0.1':
-    resolution: {integrity: sha512-rbto/mF/SGERxEgYOek7Xm6B9b+y+mVoo+f4b2LymYO8zM1b7uB5nHuhVMTP2hxdzgxvGiZYGxGIaMvL5y180Q==}
+  '@vitest/spy@5.0.3':
+    resolution: {integrity: sha512-XhFysQTB8AZ+P4gMi+Lpo99vg2AZi0qKpaB9yXQl37+CaMEAPO3iH/wGVnSyL5MPERiLezpqTVtrR6UZH5GCXg==}
 
   '@xterm/addon-fit@0.10.0':
     resolution: {integrity: sha512-UFYkDm4HUahf2lnEyHvio51TNGiLK66mqP2JoATy7hRZeXaGMRDr00JiSF7m63vR5WKATF605yEggJKsw0JpMQ==}
@@ -3395,9 +3395,6 @@ packages:
     resolution: {integrity: sha512-6x6dK6zJdpTzF4sQeNYxwtvBzf6Eg4GtlesS94HOvTudUeyK2WXAaIfmDgsyslYrRBeFIlsi54AYsFGUuhmvrQ==}
     engines: {node: '>= 0.4'}
 
-  siginfo@2.0.0:
-    resolution: {integrity: sha512-ybx0WO1/8bSBLEWXZvEd7gMW3Sn3JFlW3TvX1nREbDLRNQNaeNN8WK0meBwPdAaOI7TtRRRJn/Es1zhrrCHu7g==}
-
   signal-exit@3.0.7:
     resolution: {integrity: sha512-wnD2ZE+l+SPC/uoS0vXeE9L1+0wuaMqKlfz9AMUo38JsyLSBWSFcHR1Rri62LZc12vLr1gb3jl7iwQhgwpAbGQ==}
 
@@ -3445,9 +3442,6 @@ packages:
 
   stack-trace@0.0.10:
     resolution: {integrity: sha512-KGzahc7puUKkzyMt+IqAep+TVNbKP+k2Lmwhub39m1AsTSkaDutx56aDCo+HLDzf/D26BIHTJWNiTG1KAJiQCg==}
-
-  stackback@0.0.2:
-    resolution: {integrity: sha512-1XMJE5fQo1jGH6Y/7ebnwPOBEkIEnT4QF32d5R1+VXdXveM0IBMJt8zfaxX1P3QhVwrYe+576+jkANtSS2mBbw==}
 
   static-eval@2.0.2:
     resolution: {integrity: sha512-N/D219Hcr2bPjLxPiV+TQE++Tsmrady7TqAJugLy7Xk1EumfDWS/f5dtBbkRCGE7wKKXuYockQoj8Rm2/pVKyg==}
@@ -3732,20 +3726,20 @@ packages:
       yaml:
         optional: true
 
-  vitest@5.0.1:
-    resolution: {integrity: sha512-iA95lQbKEkvrtTkdAgnWbXfbipWiiWe/hDl2P5tMi6WFwD76G0NxXAGp/M9EOcYupeGJRr6wppMc7CoA41TQjg==}
+  vitest@5.0.3:
+    resolution: {integrity: sha512-xMw97S3rjdtj5dkVat7jCsqWBpvchs3RlpQctUqwJD0KkERk40vz2fJ77lDwW/Vzh/pk18eItYAzkodhSes3jQ==}
     engines: {node: ^22.12.0 || ^24.0.0 || >=26.0.0}
     hasBin: true
     peerDependencies:
       '@edge-runtime/vm': '*'
       '@opentelemetry/api': ^1.9.0
       '@types/node': ^22.0.0 || >=24.0.0
-      '@vitest/browser-playwright': 5.0.1
-      '@vitest/browser-preview': 5.0.1
+      '@vitest/browser-playwright': 5.0.3
+      '@vitest/browser-preview': 5.0.3
       '@vitest/browser-webdriverio': ^5.0.0-beta.5 || >=5.0.0
-      '@vitest/coverage-istanbul': 5.0.1
-      '@vitest/coverage-v8': 5.0.1
-      '@vitest/ui': 5.0.1
+      '@vitest/coverage-istanbul': 5.0.3
+      '@vitest/coverage-v8': 5.0.3
+      '@vitest/ui': 5.0.3
       happy-dom: '*'
       jsdom: '*'
       vite: ^6.4.0 || ^7.0.0 || ^8.0.0
@@ -3805,9 +3799,9 @@ packages:
     resolution: {integrity: sha512-fvO4ExWMFsqyhG3AiPAObMuY1lxaqgYcxbc49CNdWDDECOJNgQyvsOWVwbZc+qf3rzRtxojBK+CMEv0Ld5CYpw==}
     engines: {node: '>= 0.4'}
 
-  why-is-node-running@2.3.0:
-    resolution: {integrity: sha512-hUrmaWBdVDcxvYqnyh09zunKzROWjbZTiNy8dBEjkS7ehEDQibXJ7XvlmtbwuTclUiIyN+CyXQD4Vmko8fNm8w==}
-    engines: {node: '>=8'}
+  why-is-node-running@3.2.1:
+    resolution: {integrity: sha512-Tb2FUhB4vUsGQlfSquQLYkApkuPAFQXGFzxWKHHumVz2dK+X1RUm/HnID4+TfIGYJ1kTcwOaCk/buYCEJr6YjQ==}
+    engines: {node: '>=20.11'}
     hasBin: true
 
   winston-transport-browserconsole@1.0.5:
@@ -5345,16 +5339,16 @@ snapshots:
     optionalDependencies:
       '@rolldown/plugin-babel': 0.2.2(@babel/core@7.29.0(supports-color@8.1.1))(@babel/runtime@7.28.2)(rolldown@1.2.12)(vite@8.3.1(@types/node@22.15.35)(esbuild@0.27.2)(less@4.4.0)(sass-embedded@1.100.0)(sass@1.100.0)(stylus@0.62.0(supports-color@8.1.1)))
 
-  '@vitest/mocker@5.0.1(vite@8.3.1(@types/node@22.15.35)(esbuild@0.27.2)(less@4.4.0)(sass-embedded@1.100.0)(sass@1.100.0)(stylus@0.62.0(supports-color@8.1.1)))':
+  '@vitest/mocker@5.0.3(vite@8.3.1(@types/node@22.15.35)(esbuild@0.27.2)(less@4.4.0)(sass-embedded@1.100.0)(sass@1.100.0)(stylus@0.62.0(supports-color@8.1.1)))':
     dependencies:
       '@jridgewell/trace-mapping': 0.3.31
-      '@vitest/spy': 5.0.1
+      '@vitest/spy': 5.0.3
       estree-walker: 3.0.3
       magic-string: 1.3.1
     optionalDependencies:
       vite: 8.3.1(@types/node@22.15.35)(esbuild@0.27.2)(less@4.4.0)(sass-embedded@1.100.0)(sass@1.100.0)(stylus@0.62.0(supports-color@8.1.1))
 
-  '@vitest/spy@5.0.1': {}
+  '@vitest/spy@5.0.3': {}
 
   '@xterm/addon-fit@0.10.0(@xterm/xterm@5.5.0)':
     dependencies:
@@ -7242,8 +7236,6 @@ snapshots:
       side-channel-map: 1.0.1
       side-channel-weakmap: 1.0.2
 
-  siginfo@2.0.0: {}
-
   signal-exit@3.0.7: {}
 
   simple-swizzle@0.2.2:
@@ -7281,8 +7273,6 @@ snapshots:
   sprintf-js@1.1.3: {}
 
   stack-trace@0.0.10: {}
-
-  stackback@0.0.2: {}
 
   static-eval@2.0.2:
     dependencies:
@@ -7575,10 +7565,10 @@ snapshots:
       sass-embedded: 1.100.0
       stylus: 0.62.0(supports-color@8.1.1)
 
-  vitest@5.0.1(@types/node@22.15.35)(jsdom@30.1.1)(vite@8.3.1(@types/node@22.15.35)(esbuild@0.27.2)(less@4.4.0)(sass-embedded@1.100.0)(sass@1.100.0)(stylus@0.62.0(supports-color@8.1.1))):
+  vitest@5.0.3(@types/node@22.15.35)(jsdom@30.1.1)(vite@8.3.1(@types/node@22.15.35)(esbuild@0.27.2)(less@4.4.0)(sass-embedded@1.100.0)(sass@1.100.0)(stylus@0.62.0(supports-color@8.1.1))):
     dependencies:
       '@types/chai': 5.2.3
-      '@vitest/mocker': 5.0.1(vite@8.3.1(@types/node@22.15.35)(esbuild@0.27.2)(less@4.4.0)(sass-embedded@1.100.0)(sass@1.100.0)(stylus@0.62.0(supports-color@8.1.1)))
+      '@vitest/mocker': 5.0.3(vite@8.3.1(@types/node@22.15.35)(esbuild@0.27.2)(less@4.4.0)(sass-embedded@1.100.0)(sass@1.100.0)(stylus@0.62.0(supports-color@8.1.1)))
       chai: 6.2.2
       es-module-lexer: 2.3.2
       expect-type: 1.4.0
@@ -7590,7 +7580,7 @@ snapshots:
       tinyexec: 1.3.0
       tinyglobby: 0.2.17
       vite: 8.3.1(@types/node@22.15.35)(esbuild@0.27.2)(less@4.4.0)(sass-embedded@1.100.0)(sass@1.100.0)(stylus@0.62.0(supports-color@8.1.1))
-      why-is-node-running: 2.3.0
+      why-is-node-running: 3.2.1
     optionalDependencies:
       '@types/node': 22.15.35
       jsdom: 30.1.1
@@ -7646,10 +7636,7 @@ snapshots:
       gopd: 1.2.0
       has-tostringtag: 1.0.2
 
-  why-is-node-running@2.3.0:
-    dependencies:
-      siginfo: 2.0.0
-      stackback: 0.0.2
+  why-is-node-running@3.2.1: {}
 
   winston-transport-browserconsole@1.0.5:
     dependencies:
