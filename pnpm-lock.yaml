@@ -200,7 +200,7 @@ importers:
         specifier: 7.0.2
         version: 7.0.2
       vite:
-        specifier: ^8.3.2
+        specifier: ^8.3.3
         version: 8.3.3(@types/node@22.15.35)(esbuild@0.27.2)(less@4.4.0)(sass-embedded@1.100.0)(sass@1.100.0)(stylus@0.62.0(supports-color@8.1.1))
       vitest:
         specifier: ^5.0.2
