@@ -82,15 +82,6 @@
         "minor"
       ],
       "enabled": false
-    },
-    // postupdate script
-    {
-      "matchDepNames": [
-        "@biomejs/biome",
-      ],
-      "postUpdateOptions": [
-        "runScripts"
-      ]
     }
   ],
   "customManagers": [
