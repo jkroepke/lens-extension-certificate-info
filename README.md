@@ -19,9 +19,10 @@ Pull requests for more formats like Java Keystore or PKCS#12 are welcome.
 ## Compatibility
 
 | Version                                                | Extension Version |
-|--------------------------------------------------------|-------------------|
+| ------------------------------------------------------ | ----------------- |
 | [OpenLens](https://github.com/MuhammedKalkan/OpenLens) | <3                |
-| [FreeLens](https://github.com/freelensapp/freelens)    | >=4               |
+| [FreeLens](https://github.com/freelensapp/freelens) 1  | 4                 |
+| [FreeLens](https://github.com/freelensapp/freelens) 2  | >=5               |
 
 ## Installation
 
@@ -45,6 +46,17 @@ Menu > Extensions and search for `lens-certificate-info`.
 
 Replace `$VERSION` with a real version like `1.1.2`.
 
+## Development
+
+Requires Node.js 24 and [Freelens](https://github.com/freelensapp/freelens) 2.0.0 or newer.
+
+```sh
+pnpm install
+pnpm build
+```
+
+On the Extensions page of Freelens, enter the directory of this checkout and confirm that it is loaded in place. `pnpm dev` then rebuilds on every change, and Freelens reloads the extension after each rebuild.
+
 ## Copyright and license
 
 © 2021 [Jan-Otto Kröpke (jkroepke)](https://github.com/jkroepke/lens-extension-certificate-info)
@@ -55,8 +67,8 @@ Licensed under the [Apache License, Version 2.0](LICENSE)
 
 Thanks to all sponsors!
 
-* [@hegawa](https://github.com/hegawa) (25$) onetime
-* [@Zero-Down-Time](https://github.com/Zero-Down-Time) (25$) onetime
+- [@hegawa](https://github.com/hegawa) (25$) onetime
+- [@Zero-Down-Time](https://github.com/Zero-Down-Time) (25$) onetime
 
 ## Acknowledgements
 
@@ -74,8 +86,14 @@ Thanks to JetBrains IDEs for their support.
         <center>
           <a href="https://www.jetbrains.com/?from=jkroepke">
             <picture>
-              <source srcset="https://www.jetbrains.com/company/brand/img/logo_jb_dos_3.svg" media="(prefers-color-scheme: dark)">
-              <img src="https://resources.jetbrains.com/storage/products/company/brand/logos/jetbrains.svg" style="height: 50px">
+              <source
+                srcset="https://www.jetbrains.com/company/brand/img/logo_jb_dos_3.svg"
+                media="(prefers-color-scheme: dark)"
+              >
+              <img
+                src="https://resources.jetbrains.com/storage/products/company/brand/logos/jetbrains.svg"
+                style="height: 50px"
+              >
             </picture>
           </a>
         </center>

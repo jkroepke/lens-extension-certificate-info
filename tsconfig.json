@@ -1,11 +1,10 @@
 {
-  "extends": "@electron-toolkit/tsconfig/tsconfig.node.json",
-  "include": ["*.ts", "src/**/*"],
+  "extends": "./tsconfig.base.json",
   "compilerOptions": {
-    "composite": true,
-    "esModuleInterop": true,
-    "jsx": "react-jsx",
-    "moduleResolution": "bundler",
-    "types": ["vite/client", "electron-vite/node"]
-  }
+    "lib": ["ES2024"],
+    "types": ["node"],
+    "allowJs": true,
+    "checkJs": true
+  },
+  "include": ["*.ts", "*.mjs", "build/**/*"]
 }

@@ -15,7 +15,6 @@ permissions:
 
 jobs:
   npm-dedupe:
-
     name: npm dedupe
 
     runs-on: ubuntu-24.04-arm
