@@ -18,14 +18,43 @@ const pruneWorkflows = args.has("--prune-workflows");
 const ref = getOptionValue("--ref") ?? process.env.FREELENS_EXAMPLE_REF ?? defaultRef;
 const excludedWorkflowFiles = new Set(["claude-task.yaml", "claude.yaml", "npm-audit.yaml", "osv-scanner.yaml"]);
 
+// Copied as they are, so a sync stays a plain copy of the template.
 const fileMappings = [
+  [".editorconfig", ".editorconfig"],
+  [".gitattributes", ".gitattributes"],
+  [".gitignore", ".gitignore"],
+  [".nvmrc", ".nvmrc"],
+  [".renovaterc.json", ".renovaterc.json"],
+  [".trunk/.gitignore", ".trunk/.gitignore"],
   [".trunk/trunk.yaml", ".trunk/trunk.yaml"],
+  [".yamllint.yaml", ".yamllint.yaml"],
   ["biome.jsonc", "biome.jsonc"],
-  [".renovaterc.json5", ".renovaterc.json5"],
-  ["tsconfig.json", "tsconfig.json"],
+  ["build/vite-plugin-css-module-declarations.mjs", "build/vite-plugin-css-module-declarations.mjs"],
+  ["build/vite-plugin-host-modules.mjs", "build/vite-plugin-host-modules.mjs"],
+  ["build/vite-plugin-standard-decorators.mjs", "build/vite-plugin-standard-decorators.mjs"],
+  ["environment-tests/dom-apis.ts", "environment-tests/dom-apis.ts"],
+  ["environment-tests/node-apis.ts", "environment-tests/node-apis.ts"],
+  ["environment-tests/shared-apis.ts", "environment-tests/shared-apis.ts"],
+  ["environment-tests/tsconfig.json", "environment-tests/tsconfig.json"],
+  ["environment-tests/tsconfig.main.json", "environment-tests/tsconfig.main.json"],
+  ["environment-tests/tsconfig.renderer.json", "environment-tests/tsconfig.renderer.json"],
+  ["environment-tests/worker-apis.ts", "environment-tests/worker-apis.ts"],
+  ["examples/.yamlfmt.yaml", "examples/.yamlfmt.yaml"],
+  ["integration/fixtures/.yamlfmt.yaml", "integration/fixtures/.yamlfmt.yaml"],
+  ["integration/tsconfig.json", "integration/tsconfig.json"],
   ["knip.jsonc", "knip.jsonc"],
-  ["electron.vite.config.js", "electron.vite.config.ts"],
+  ["mise.lock", "mise.lock"],
+  ["mise.toml", "mise.toml"],
+  ["pnpm-workspace.yaml", "pnpm-workspace.yaml"],
+  ["src/common/tsconfig.json", "src/common/tsconfig.json"],
+  ["src/main/tsconfig.json", "src/main/tsconfig.json"],
+  ["src/renderer/tsconfig.json", "src/renderer/tsconfig.json"],
+  ["src/tsconfig.json", "src/tsconfig.json"],
+  ["tsconfig.base.json", "tsconfig.base.json"],
+  ["tsconfig.json", "tsconfig.json"],
+  ["vite.config.mjs", "vite.config.mjs"],
   ["vitest.config.ts", "vitest.config.ts"],
+  ["vitest.integration.config.ts", "vitest.integration.config.ts"],
 ];
 
 const updated = [];
@@ -130,6 +159,10 @@ async function updateFile(sourcePath, targetPath) {
 }
 
 function transformContent(sourcePath, targetPath, content) {
+  if (targetPath === ".github/workflows/integration-tests.yaml") {
+    return keepRequiredCheckName(content);
+  }
+
   if (!targetPath.startsWith(".github/workflows/") || !content.includes("secrets.GH_TOKEN")) {
     return content;
   }
@@ -170,6 +203,16 @@ function transformContent(sourcePath, targetPath, content) {
   return nextContent;
 }
 
+// The ruleset of main requires a check named "integration tests with Freelens",
+// so the name must not change with the Freelens version. The expression stays:
+// GitHub appends the matrix values to the name of a job whose name has none.
+function keepRequiredCheckName(content) {
+  return content.replace(
+    'name: "integration tests with Freelens ${{ matrix.freelens_version }}"',
+    "name: \"integration tests with Freelens ${{ matrix.freelens_version == 'main' && 'main' || '' }}\"",
+  );
+}
+
 function addPrMergeStep(sourcePath, content) {
   const mergeCommands = new Map([
     [".github/workflows/biome-migrate.yaml", "gh pr merge --admin --squash --delete-branch automated/biome-migrate"],
@@ -199,6 +242,8 @@ async function updatePackageJson() {
     ...targetPackage,
     scripts: sourcePackage.scripts,
     engines: sourcePackage.engines,
+    devDependencies: sourcePackage.devDependencies,
+    packageManager: sourcePackage.packageManager,
   };
   const nextContent = `${JSON.stringify(nextPackage, null, 2)}\n`;
   const current = await readFile(target, "utf8");

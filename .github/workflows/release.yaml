@@ -5,7 +5,9 @@ on:
     tags:
       - v*
 
-permissions: {}
+permissions:
+  contents: write
+  id-token: write
 
 jobs:
   release:
@@ -14,22 +16,15 @@ jobs:
     runs-on: ubuntu-24.04-arm
     environment: publishing
 
-    env:
-      VITE_PRESERVE_MODULES: "false"
-
-    permissions:
-      contents: write
-      id-token: write
-
     steps:
       - name: Checkout plugin
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        uses: actions/checkout@v7
 
       - name: Check if package version matches
         run: test "${GITHUB_REF_NAME}" = "v$(yq -r .version package.json)"
 
       - name: Setup node
-        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        uses: actions/setup-node@v7
         with:
           node-version-file: .nvmrc
           package-manager-cache: false
@@ -46,7 +41,7 @@ jobs:
         run: echo "pnpm_cache_dir=$(pnpm store path)" >> ${GITHUB_ENV}
 
       - name: Use pnpm cache
-        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        uses: actions/cache@v6
         with:
           path: ${{ env.pnpm_cache_dir }}
           key: ubuntu-24.04-arm-node-${{ hashFiles('**/pnpm-lock.yaml') }}
@@ -163,9 +158,10 @@ jobs:
           done
 
       - name: Create release
-        uses: softprops/action-gh-release@efb35369e0ad2afab669f228072c1b0d510eae64 # v3.0.3
+        uses: softprops/action-gh-release@v3
         with:
           fail_on_unmatched_files: true
+          prerelease: ${{ contains(github.ref_name, '-') }}
           files: |-
             *.tgz
             *.tgz.sha256

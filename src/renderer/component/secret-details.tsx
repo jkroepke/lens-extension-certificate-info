@@ -1,227 +1,205 @@
-import { Renderer } from "@freelensapp/extensions";
-import { X509Certificate } from "crypto";
+import { Common, Renderer } from "@freelensapp/extensions";
 import React from "react";
+import { parseCertificates } from "../certificate-ipc";
 
-type CertificateInfo = {
-  subject: string;
-  issuer: string;
-  subjectAltName: string | undefined;
-  serialNumber: string;
-  validFrom: string;
-  validTo: string;
-  keyType: string;
-  selfSigned: boolean;
+import type { CertificateInfo } from "../../common/certificate";
+
+type SecretDetailsProps = Renderer.Component.KubeObjectDetailsProps<Renderer.K8sApi.Secret>;
+
+type CertificateBlock = {
+  key: string;
+  index: number;
+  pem: string;
 };
 
-export class SecretDetails extends React.Component<Renderer.Component.KubeObjectDetailsProps<Renderer.K8sApi.Secret>> {
-  private daysBetween(date: Date, now = new Date()): number {
-    return Math.ceil((date.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
+type ParsedCertificate = {
+  key: string;
+  index: number;
+  info: CertificateInfo;
+};
+
+function daysBetween(date: Date, now = new Date()): number {
+  return Math.ceil((date.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
+}
+
+export function formatExpireDate(dateString: string) {
+  const date = new Date(dateString);
+  const now = new Date();
+  const color = now > date ? "red" : undefined;
+  const diffInDays = daysBetween(date, now);
+  const validityText = diffInDays < 0 ? `Expired ${Math.abs(diffInDays)} days ago` : `Expires in ${diffInDays} days`;
+
+  return (
+    <span style={{ color }}>
+      {dateString} <i>({validityText})</i>
+    </span>
+  );
+}
+
+export function formatNotBefore(dateString: string) {
+  const date = new Date(dateString);
+  const now = new Date();
+  const diffInDays = daysBetween(date, now);
+
+  if (diffInDays <= 0) {
+    return dateString;
   }
 
-  formatExpireDate(dateString: string) {
-    const date = new Date(dateString);
-    const now = new Date();
-    const color = now > date ? "red" : undefined;
-    const diffInDays = this.daysBetween(date, now);
-    const validityText = diffInDays < 0 ? `Expired ${Math.abs(diffInDays)} days ago` : `Expires in ${diffInDays} days`;
+  return (
+    <span style={{ color: "red" }}>
+      {dateString} <i>(Not valid yet, starts in {diffInDays} days)</i>
+    </span>
+  );
+}
 
+export function formatSAN(subjectAltName: string | undefined) {
+  return subjectAltName?.split(/, /).map((s, i) => (
+    <React.Fragment key={`${s}-${i}`}>
+      {s}
+      <br />
+    </React.Fragment>
+  ));
+}
+
+function extractCN(distinguishedName: string): string | undefined {
+  if (typeof distinguishedName === "undefined") {
+    return undefined;
+  }
+
+  // Use regex for more efficient CN extraction
+  const cnMatch = distinguishedName.match(/CN=([^,\n]+)/);
+  return cnMatch ? cnMatch[1].trim() : distinguishedName;
+}
+
+export function formatIssuer(issuer: string, selfSigned: boolean) {
+  const issuerCN = extractCN(issuer);
+
+  if (typeof issuerCN === "undefined") {
     return (
-      <span style={{ color }}>
-        {dateString} <i>({validityText})</i>
-      </span>
-    );
-  }
-
-  formatNotBefore(dateString: string) {
-    const date = new Date(dateString);
-    const now = new Date();
-    const diffInDays = this.daysBetween(date, now);
-
-    if (diffInDays <= 0) {
-      return dateString;
-    }
-
-    return (
-      <span style={{ color: "red" }}>
-        {dateString} <i>(Not valid yet, starts in {diffInDays} days)</i>
-      </span>
-    );
-  }
-
-  formatSAN(subjectAltName: string | undefined) {
-    return subjectAltName?.split(/, /).map((s, i) => (
-      <React.Fragment key={`${s}-${i}`}>
-        {s}
-        <br />
+      <React.Fragment>
+        <i>No issuer</i>
       </React.Fragment>
-    ));
+    );
   }
 
-  private extractCN(distinguishedName: string): string | undefined {
-    if (typeof distinguishedName === "undefined") {
-      return undefined;
-    }
-
-    // Use regex for more efficient CN extraction
-    const cnMatch = distinguishedName.match(/CN=([^,\n]+)/);
-    return cnMatch ? cnMatch[1].trim() : distinguishedName;
+  if (selfSigned) {
+    return (
+      <React.Fragment>
+        {issuerCN} <i>(self-signed)</i>
+      </React.Fragment>
+    );
   }
 
-  formatIssuer(issuer: string, selfSigned: boolean) {
-    const issuerCN = this.extractCN(issuer);
+  return <React.Fragment>{issuerCN}</React.Fragment>;
+}
 
-    if (typeof issuerCN === "undefined") {
-      return (
-        <React.Fragment>
-          <i>No issuer</i>
-        </React.Fragment>
-      );
-    }
+function extractCertificatesFromPEM(pemString: string): string[] {
+  const PEM_CERTIFICATE_HEADER = "-----BEGIN CERTIFICATE-----";
+  const PEM_CERTIFICATE_FOOTER = "-----END CERTIFICATE-----";
 
-    if (selfSigned) {
-      return (
-        <React.Fragment>
-          {issuerCN} <i>(self-signed)</i>
-        </React.Fragment>
-      );
-    }
+  const certificates: string[] = [];
+  let startIndex = 0;
 
-    return <React.Fragment>{issuerCN}</React.Fragment>;
+  while (true) {
+    const headerIndex = pemString.indexOf(PEM_CERTIFICATE_HEADER, startIndex);
+    if (headerIndex === -1) break;
+
+    const footerIndex = pemString.indexOf(PEM_CERTIFICATE_FOOTER, headerIndex);
+    if (footerIndex === -1) break;
+
+    const certificateString = pemString.substring(headerIndex, footerIndex + PEM_CERTIFICATE_FOOTER.length);
+
+    certificates.push(certificateString);
+    startIndex = footerIndex + PEM_CERTIFICATE_FOOTER.length;
   }
 
-  extractCertificatesFromPEM(pemString: string): string[] {
-    const PEM_CERTIFICATE_HEADER = "-----BEGIN CERTIFICATE-----";
-    const PEM_CERTIFICATE_FOOTER = "-----END CERTIFICATE-----";
+  return certificates;
+}
 
-    const certificates: string[] = [];
-    let startIndex = 0;
+// Only the certificate blocks leave the renderer: a Secret value may hold a
+// private key next to its certificate.
+function extractCertificateBlocks(secret: Renderer.K8sApi.Secret): CertificateBlock[] {
+  const secretData = secret.data;
+  const blocks: CertificateBlock[] = [];
 
-    while (true) {
-      const headerIndex = pemString.indexOf(PEM_CERTIFICATE_HEADER, startIndex);
-      if (headerIndex === -1) break;
-
-      const footerIndex = pemString.indexOf(PEM_CERTIFICATE_FOOTER, headerIndex);
-      if (footerIndex === -1) break;
-
-      const certificateString = pemString.substring(headerIndex, footerIndex + PEM_CERTIFICATE_FOOTER.length);
-
-      certificates.push(certificateString);
-      startIndex = footerIndex + PEM_CERTIFICATE_FOOTER.length;
+  for (const key of secret.getKeys()) {
+    if (!secretData[key] || !secretData[key].startsWith("LS0tLS1CRUdJTi")) {
+      // The key does not contain a valid PEM certificate header
+      continue;
     }
 
-    return certificates;
+    extractCertificatesFromPEM(atob(secretData[key])).forEach((pem, index) => {
+      blocks.push({ key, index, pem });
+    });
   }
 
-  private getKeyType(cert: X509Certificate): string {
-    try {
-      const publicKey = cert.publicKey;
-      const keyDetails = publicKey.asymmetricKeyDetails;
+  return blocks;
+}
 
-      if (publicKey.asymmetricKeyType === "rsa") {
-        const keySize = keyDetails?.modulusLength || "unknown";
-        return `RSA${keySize}`;
-      } else if (publicKey.asymmetricKeyType === "ec") {
-        const namedCurve = keyDetails?.namedCurve || "unknown";
-        return `EC (${namedCurve})`;
-      } else if (publicKey.asymmetricKeyType === "ed25519") {
-        return "Ed25519";
-      } else if (publicKey.asymmetricKeyType === "ed448") {
-        return "Ed448";
-      } else {
-        return publicKey.asymmetricKeyType || "Unknown";
-      }
-    } catch (error) {
-      console.error("Error extracting key type:", error);
-      return "Unknown";
-    }
-  }
+export function SecretDetails({ object }: SecretDetailsProps) {
+  const [parsed, setParsed] = React.useState<{ object: Renderer.K8sApi.Secret; certificates: ParsedCertificate[] }>();
 
-  private isSelfSigned(cert: X509Certificate): boolean {
-    if (cert.issuer !== cert.subject) {
-      return false;
-    }
-
-    try {
-      return cert.verify(cert.publicKey);
-    } catch (error) {
-      console.error("Error verifying certificate signature:", error);
-      return false;
-    }
-  }
-
-  parseCertificate(certificateString: string): CertificateInfo | null {
-    try {
-      const cert = new X509Certificate(certificateString);
-
-      // Get SAN (Subject Alternative Names)
-      const san = cert.subjectAltName;
-
-      return {
-        subject: cert.subject,
-        issuer: cert.issuer,
-        subjectAltName: san,
-        serialNumber: cert.serialNumber,
-        validFrom: cert.validFrom,
-        validTo: cert.validTo,
-        keyType: this.getKeyType(cert),
-        selfSigned: this.isSelfSigned(cert),
-      };
-    } catch (error) {
-      console.error("Error parsing certificate:", error);
-      return null;
-    }
-  }
-
-  render() {
-    const { object } = this.props;
-
+  React.useEffect(() => {
     if (!object || !object.data) {
-      return null;
+      return;
     }
 
-    const secretKeys = object.getKeys();
-    const secretData = object.data;
-    const certificates: React.ReactNode[] = [];
+    const blocks = extractCertificateBlocks(object);
 
-    for (const key of secretKeys) {
-      if (!secretData[key] || !secretData[key].startsWith("LS0tLS1CRUdJTi")) {
-        // The key does not contain a valid PEM certificate header
-        continue;
-      }
+    if (blocks.length === 0) {
+      return;
+    }
 
-      const secretString = Buffer.from(secretData[key], "base64").toString("ascii");
-      const certificateStrings = this.extractCertificatesFromPEM(secretString);
+    let stale = false;
 
-      certificateStrings.forEach((certificateString, i) => {
-        const cert = this.parseCertificate(certificateString);
-
-        if (cert) {
-          certificates.push(
-            <div key={`${key}-${i}`}>
-              <Renderer.Component.DrawerTitle>
-                Certificate Info - {key} ({i + 1})
-              </Renderer.Component.DrawerTitle>
-              <Renderer.Component.DrawerItem name="Subject">{cert.subject}</Renderer.Component.DrawerItem>
-              <Renderer.Component.DrawerItem name="SAN">
-                {this.formatSAN(cert.subjectAltName)}
-              </Renderer.Component.DrawerItem>
-              <Renderer.Component.DrawerItem name="Key Type">{cert.keyType}</Renderer.Component.DrawerItem>
-              <Renderer.Component.DrawerItem name="Serial Number">{cert.serialNumber}</Renderer.Component.DrawerItem>
-              <Renderer.Component.DrawerItem name="Issuer">
-                {this.formatIssuer(cert.issuer, cert.selfSigned)}
-              </Renderer.Component.DrawerItem>
-              <Renderer.Component.DrawerItem name="Not before">
-                {this.formatNotBefore(cert.validFrom)}
-              </Renderer.Component.DrawerItem>
-              <Renderer.Component.DrawerItem name="Expires">
-                {this.formatExpireDate(cert.validTo)}
-              </Renderer.Component.DrawerItem>
-            </div>,
-          );
+    parseCertificates(blocks.map(({ pem }) => pem))
+      .then((results) => {
+        if (stale) {
+          return;
         }
-      });
-    }
 
-    return <div>{certificates}</div>;
+        const certificates = blocks.flatMap(({ key, index }, i) => {
+          const info = results[i];
+
+          return info ? [{ key, index, info }] : [];
+        });
+
+        setParsed({ object, certificates });
+      })
+      .catch((error) => {
+        Common.logger.error(`[lens-certificate-info]: Error parsing certificates: ${error}`);
+      });
+
+    return () => {
+      stale = true;
+    };
+  }, [object]);
+
+  // The host passes a new object when it changes or another Secret is opened.
+  if (!parsed || parsed.object !== object) {
+    return null;
   }
+
+  return (
+    <div>
+      {parsed.certificates.map(({ key, index, info: cert }) => (
+        <div key={`${key}-${index}`}>
+          <Renderer.Component.DrawerTitle>
+            Certificate Info - {key} ({index + 1})
+          </Renderer.Component.DrawerTitle>
+          <Renderer.Component.DrawerItem name="Subject">{cert.subject}</Renderer.Component.DrawerItem>
+          <Renderer.Component.DrawerItem name="SAN">{formatSAN(cert.subjectAltName)}</Renderer.Component.DrawerItem>
+          <Renderer.Component.DrawerItem name="Key Type">{cert.keyType}</Renderer.Component.DrawerItem>
+          <Renderer.Component.DrawerItem name="Serial Number">{cert.serialNumber}</Renderer.Component.DrawerItem>
+          <Renderer.Component.DrawerItem name="Issuer">
+            {formatIssuer(cert.issuer, cert.selfSigned)}
+          </Renderer.Component.DrawerItem>
+          <Renderer.Component.DrawerItem name="Not before">
+            {formatNotBefore(cert.validFrom)}
+          </Renderer.Component.DrawerItem>
+          <Renderer.Component.DrawerItem name="Expires">{formatExpireDate(cert.validTo)}</Renderer.Component.DrawerItem>
+        </div>
+      ))}
+    </div>
+  );
 }

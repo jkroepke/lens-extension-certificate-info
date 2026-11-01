@@ -1,8 +1,24 @@
 allowBuilds:
   '@parcel/watcher': true
   electron: true
-  esbuild: true
-  node-pty: true
-  playwright: true
+  esbuild: false
+
+engineStrict: true
+
+# pnpm holds back any version younger than minimumReleaseAge (1 day by
+# default). @freelensapp/extensions is adopted on the day of a Freelens
+# release, together with the stack it was built with. The other entries are
+# the ones Freelens has, one exact version each, for security fixes that
+# cannot wait. Remove such an entry once that version is older than the
+# policy: the exclusion is then a no-op.
+minimumReleaseAgeExclude:
+  - '@freelensapp/extensions'
+  # Node 24.22.1, the fix of CVE-2026-111497.
+  - electron@44.10.0
 
 shellEmulator: true
+
+# Fail the install, instead of printing one warning line, when a library the
+# extension shares with the host is outside the peer range of
+# @freelensapp/extensions.
+strictPeerDependencies: true

@@ -19,17 +19,14 @@ jobs:
   create-tag:
     name: tag
 
-    runs-on: ubuntu-24.04-arm
+    runs-on: ubuntu-24.04
     environment: automated
     timeout-minutes: 10
 
-    if: >
-      (startsWith(github.event.issue.title, 'Automated npm version') && github.event.issue.state == 'closed' && github.event.comment.body
-      == '/tag') || (startsWith(github.event.pull_request.title, 'Automated npm version') && github.event.pull_request.merged)
-
+    if: (startsWith(github.event.issue.title, 'Automated npm version') && github.event.issue.state == 'closed' && github.event.comment.body == '/tag') || (startsWith(github.event.pull_request.title, 'Automated npm version') && github.event.pull_request.merged)
     steps:
       - name: Checkout
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
           ref: main
@@ -37,18 +34,18 @@ jobs:
       - name: Get version from package.json
         id: package-json
         run: |
-          echo "version=$(jq -r .version package.json)" >> $GITHUB_OUTPUT
+          echo "version=$(yq -r .version package.json)" >> $GITHUB_OUTPUT
 
       - name: Check if version is release
         id: check-version
         run: |
-          if [[ "${{ steps.package-json.outputs.version }}" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+          if [[ "${{ steps.package-json.outputs.version }}" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.-]+)?$ ]]; then
             echo "is_release=true" >> $GITHUB_OUTPUT
           else
             echo "is_release=false" >> $GITHUB_OUTPUT
           fi
 
-      - uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
+      - uses: actions/create-github-app-token@v3
         if: steps.check-version.outputs.is_release == 'true'
         id: app-token
         with:
@@ -57,7 +54,7 @@ jobs:
 
       - name: Create tag from the main branch
         if: steps.check-version.outputs.is_release == 'true'
-        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
+        uses: actions/github-script@v9
         with:
           script: |
             const mainRef = await github.rest.git.getRef({
