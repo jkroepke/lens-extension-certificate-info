@@ -36,7 +36,7 @@ jobs:
       MESSAGE: Migrate biome.jsonc to the new Biome version
 
     steps:
-      - uses: actions/create-github-app-token@v3
+      - uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
         id: app-token
         with:
           client-id: 1248576
@@ -45,13 +45,13 @@ jobs:
       # The Renovate branch is checked out at its head rather than merged with
       # main, so that the migrated config matches the branch it is committed to.
       - name: Checkout
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           ref: ${{ github.event.pull_request.head.sha }}
           token: ${{ steps.app-token.outputs.token }}
 
       - name: Setup node
-        uses: actions/setup-node@v7
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version-file: .nvmrc
           package-manager-cache: false
@@ -90,7 +90,7 @@ jobs:
       # push ("You are not currently on a branch").
       - name: Commit and push to the pull request branch
         if: env.changes == 'true'
-        uses: EndBug/add-and-commit@v11
+        uses: EndBug/add-and-commit@cc9c08ba6c8df3b93a8f2db63e89b98368ae2ae8 # v11.1.1
         with:
           github_token: ${{ steps.app-token.outputs.token }}
           default_author: github_actor
