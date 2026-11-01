@@ -159,6 +159,10 @@ async function updateFile(sourcePath, targetPath) {
 }
 
 function transformContent(sourcePath, targetPath, content) {
+  if (targetPath === ".github/workflows/integration-tests.yaml") {
+    return keepRequiredCheckName(content);
+  }
+
   if (!targetPath.startsWith(".github/workflows/") || !content.includes("secrets.GH_TOKEN")) {
     return content;
   }
@@ -197,6 +201,16 @@ function transformContent(sourcePath, targetPath, content) {
   nextContent = addPrMergeStep(sourcePath, nextContent);
 
   return nextContent;
+}
+
+// The ruleset of main requires a check named "integration tests with Freelens",
+// so the name must not change with the Freelens version. The expression stays:
+// GitHub appends the matrix values to the name of a job whose name has none.
+function keepRequiredCheckName(content) {
+  return content.replace(
+    'name: "integration tests with Freelens ${{ matrix.freelens_version }}"',
+    "name: \"integration tests with Freelens ${{ matrix.freelens_version == 'main' && 'main' || '' }}\"",
+  );
 }
 
 function addPrMergeStep(sourcePath, content) {
