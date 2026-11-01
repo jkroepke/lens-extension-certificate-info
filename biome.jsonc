@@ -1,6 +1,6 @@
 {
-  // Ignore mismatch for Biome version to make Renovate updates without error
-  "$schema": "https://biomejs.dev/schemas/2.5.14/schema.json",
+  // Keep this schema aligned with the pinned Biome CLI version.
+  "$schema": "https://biomejs.dev/schemas/2.6.4/schema.json",
   "assist": {
     "actions": {
       "source": {
@@ -64,6 +64,11 @@
       "trailingCommas": "all"
     }
   },
+  "markdown": {
+    "formatter": {
+      "enabled": false
+    }
+  },
   "linter": {
     "enabled": true,
     "rules": {
@@ -116,5 +121,10 @@
     "clientKind": "git",
     "enabled": true,
     "useIgnoreFile": true
+  },
+  "yaml": {
+    "formatter": {
+      "enabled": false
+    }
   }
 }
