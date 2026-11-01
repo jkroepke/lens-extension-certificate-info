@@ -44,7 +44,7 @@ lint:
           name: lint
           parse_regex: ^::(?P<severity>.*) title=(?P<code>[^,]+),file=(?P<path>[^,]+),line=(?P<line>[^,]+),endLine=[^,]+,col=(?P<col>[^,]+),endColumn=[^:]+::(?P<message>.*)
           read_output_from: stdout
-          run: biome check --config-path=${workspace}/biome.jsonc --reporter=github ${target}
+          run: biome check --config-path=${workspace}/biome.jsonc --vcs-use-ignore-file=false --reporter=github ${target}
           run_from: ${root_or_parent_with(biome.jsonc)}
         - output: regex
           success_codes:
@@ -55,12 +55,12 @@ lint:
           name: fmt
           parse_regex: ^::(?P<severity>.*) title=(?P<code>[^,]+),file=(?P<path>[^,]+),line=(?P<line>[^,]+),endLine=[^,]+,col=(?P<col>[^,]+),endColumn=[^:]+::(?P<message>.*)
           read_output_from: stdout
-          run: biome format --config-path=${workspace}/biome.jsonc --reporter=github --write ${target}
+          run: biome format --config-path=${workspace}/biome.jsonc --vcs-use-ignore-file=false --reporter=github --write ${target}
           run_from: ${root_or_parent_with(biome.jsonc)}
       run_timeout: 1m
   enabled:
     - actionlint@1.7.12
-    - biome@2.5.14! # datasource=npm depName=@biomejs/biome
+    - biome@2.6.4! # datasource=npm depName=@biomejs/biome
     - git-diff-check
     - markdownlint@0.50.0
     - taplo@0.10.0
