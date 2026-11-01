@@ -21,24 +21,23 @@ jobs:
     environment: automated
     timeout-minutes: 10
 
-    if: >-
-      github.event_name != 'issue_comment' || (startsWith(github.event.issue.title, 'Automated npm dedupe') && contains(github.event.comment.body,
-      '/rerun'))
+    if: github.event_name != 'issue_comment' || (startsWith(github.event.issue.title, 'Automated npm dedupe') && contains(github.event.comment.body, '/rerun'))
+
     steps:
-      - uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
+      - uses: actions/create-github-app-token@v3
         id: app-token
         with:
           client-id: 1248576
           private-key: ${{ secrets.AUTOMATION_APP_PRIVATE_KEY }}
 
       - name: Checkout
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
           token: ${{ steps.app-token.outputs.token }}
 
       - name: Setup node
-        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        uses: actions/setup-node@v7
         with:
           node-version-file: .nvmrc
           package-manager-cache: false
@@ -51,7 +50,7 @@ jobs:
         run: echo "pnpm_cache_dir=$(pnpm store path)" >> ${GITHUB_ENV}
 
       - name: Use pnpm cache
-        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        uses: actions/cache@v6
         with:
           path: ${{ env.pnpm_cache_dir }}
           key: ubuntu-24.04-arm-node-${{ hashFiles('**/pnpm-lock.yaml') }}
@@ -73,17 +72,25 @@ jobs:
           pnpm dedupe 2>&1 | tee .github/update.log || true
           sed -e 's/\x1b\[[0-9;]*m//g' .github/update.log > .github/pr_body.log
 
+      # A rerun on the same main commit reproduces what the branch already
+      # holds. Committing it would be empty, which add-and-commit treats as
+      # an error, so the branch is left alone. Only the files the dedupe
+      # changed are compared, as the branch may differ from main elsewhere.
       - name: Check for changes
         run: |
           if git diff --exit-code; then
             echo "changes=false" >> $GITHUB_ENV
+          elif git rev-parse -q --verify origin/automated/npm-dedupe >/dev/null \
+            && git diff --name-only -z | xargs -0 git diff --quiet origin/automated/npm-dedupe --; then
+            echo "Branch automated/npm-dedupe already has this result"
+            echo "changes=unchanged" >> $GITHUB_ENV
           else
             echo "changes=true" >> $GITHUB_ENV
           fi
 
       - name: Commit and push to branch
         if: env.changes == 'true'
-        uses: EndBug/add-and-commit@cc9c08ba6c8df3b93a8f2db63e89b98368ae2ae8 # v11.1.1
+        uses: EndBug/add-and-commit@v11
         with:
           github_token: ${{ steps.app-token.outputs.token }}
           default_author: github_actions

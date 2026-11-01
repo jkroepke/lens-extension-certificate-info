@@ -24,25 +24,37 @@ jobs:
     timeout-minutes: 10
 
     steps:
-      - uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
+      - uses: actions/create-github-app-token@v3
         id: app-token
         with:
           client-id: 1248576
           private-key: ${{ secrets.AUTOMATION_APP_PRIVATE_KEY }}
 
       - name: Checkout
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        uses: actions/checkout@v7
         with:
           token: ${{ steps.app-token.outputs.token }}
+
+      - name: Setup node
+        uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          package-manager-cache: false
 
       - name: Setup pnpm
         run: corepack enable
 
-      - name: Setup node
-        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+      - name: Get pnpm cache directory
+        shell: bash
+        run: echo "pnpm_cache_dir=$(pnpm store path)" >> ${GITHUB_ENV}
+
+      - name: Use pnpm cache
+        uses: actions/cache@v6
         with:
-          node-version-file: .nvmrc
-          cache: pnpm
+          path: ${{ env.pnpm_cache_dir }}
+          key: ubuntu-24.04-arm-node-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ubuntu-24.04-arm-node-
 
       - name: Install pnpm dependencies
         id: install-pnpm
@@ -57,7 +69,7 @@ jobs:
         run: |
           set -eo pipefail
           pnpm bump-version "$newversion" | tee .github/update.log
-          jq -r .version package.json > .github/version.log
+          yq -r .version package.json > .github/version.log
           sed -e 's/\x1b\[[0-9;]*m//g' .github/update.log > .github/pr_body.log
         env:
           newversion: ${{ github.event.inputs.newversion || 'prerelease' }}
@@ -81,7 +93,7 @@ jobs:
 
       - name: Commit and push to branch
         if: env.changes == 'true'
-        uses: EndBug/add-and-commit@cc9c08ba6c8df3b93a8f2db63e89b98368ae2ae8 # v11.1.1
+        uses: EndBug/add-and-commit@v11
         with:
           github_token: ${{ steps.app-token.outputs.token }}
           default_author: github_actions

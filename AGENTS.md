@@ -8,7 +8,7 @@ When a user opens a `Secret` in Freelens, the renderer extension scans the Secre
 
 The current implementation supports PEM certificate blocks stored in Secret data. The README notes that other formats, such as Java Keystore or PKCS#12, are not supported yet.
 
-This project targets the Freelens v2 extension API, `engines.freelens: ^2.0.0`. Freelens v1 and Lens are not compatible with it: Freelens refuses an extension built for another major version at discovery. The reference for the build, tooling and CI of a v2 extension is [freelensapp/freelens-example-extension](https://github.com/freelensapp/freelens-example-extension); its `AGENTS.md` gives the reason for each setting, and `scripts/update-freelens-example-configs.mjs` syncs the shared config files.
+This project targets the Freelens v2 extension API, `engines.freelens: ^2.0.0`. Freelens v1 and Lens are not compatible with it: Freelens refuses an extension built for another major version at discovery. The reference for the build, tooling and CI of a v2 extension is [freelensapp/freelens-example-extension](https://github.com/freelensapp/freelens-example-extension); its `AGENTS.md` gives the reason for each setting. The shared config files stay 1:1 with that repository, so that an update is a plain copy: change them there, or sync them with `scripts/update-freelens-example-configs.mjs`, not by hand. That script also applies this repository's app token and auto-merge steps to the workflows. `test/freelens-extensions.ts` is the template's stub plus the members the tests here reach.
 
 ## Repository Layout
 

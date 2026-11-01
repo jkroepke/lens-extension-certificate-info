@@ -34,6 +34,10 @@
   // whole renderer. vite.config.mjs is listed as an entry instead.
   "vite": false,
 
+  // Trunk runs SVGO, so no dependency turns on the plugin that finds
+  // svgo.config.mjs.
+  "svgo": true,
+
   // The build output. The `main` field of package.json makes dist/main.js an
   // entry once it exists, and the `knip` script runs with --no-gitignore, so
   // after `pnpm build` knip would report what the bundle inlines from its

@@ -25,7 +25,7 @@
     "registry": "https://registry.npmjs.org/"
   },
   "scripts": {
-    "biome": "pnpm dlx @biomejs/biome@2.6.4",
+    "biome": "pnpm dlx @biomejs/biome@2.6.3",
     "biome:check": "pnpm biome check",
     "biome:fix": "pnpm biome check --fix",
     "biome:migrate": "pnpm biome migrate --write",
@@ -37,7 +37,7 @@
     "lint": "pnpm lint:check",
     "lint:check": "pnpm biome:check",
     "lint:fix": "pnpm biome:fix",
-    "knip": "pnpm dlx knip@6.43.0 --dependencies --files --no-gitignore --no-config-hints",
+    "knip": "pnpm dlx knip@6.41.0 --dependencies --files --no-gitignore --no-config-hints",
     "knip:check": "pnpm \"/^knip:(development|production)\\$/\"",
     "knip:development": "pnpm knip",
     "knip:production": "pnpm knip --production --strict",
@@ -61,15 +61,14 @@
     "clean:dts": "pnpm dlx shx@0.4.0 rm -f \"src/**/*.d.scss.ts\"",
     "clean:node_modules": "pnpm dlx shx@0.4.0 rm -rf node_modules",
     "clean:tgz": "pnpm dlx shx@0.4.0 rm -f \"*.tgz\"",
-    "clean:all": "pnpm \"/^clean:(dist|dts|node_modules|tgz)\\$/\"",
-    "postupdate": "pnpm biome:migrate"
+    "clean:all": "pnpm \"/^clean:(dist|dts|node_modules|tgz)\\$/\""
   },
   "engines": {
     "node": ">= 24.0.0",
     "freelens": "^2.0.0"
   },
   "devDependencies": {
-    "@freelensapp/extensions": "^2.0.0",
+    "@freelensapp/extensions": "2.0.0",
     "@testing-library/dom": "10.4.2",
     "@testing-library/react": "16.3.3",
     "@types/node": "24.19.2",
@@ -102,5 +101,5 @@
     "openlens",
     "freelens"
   ],
-  "packageManager": "pnpm@12.16.1"
+  "packageManager": "pnpm@12.15.0+sha512.b3951d6d6ff4a9f13dc7cf56cd28d2b8eb37dbcc9c68e52e1e1191873ea9f82a017287ab50baadc5ccc494f036c67c0e47eb13608c2fa36f47711b61ea128e61"
 }
