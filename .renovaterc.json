@@ -9,7 +9,7 @@
     "gitIgnoredAuthors: biome-migrate.yaml commits the migrated biome.jsonc to a Renovate branch as github-actions[bot]; without this, Renovate takes that commit for a manual edit, marks the pull request as edited and stops updating it.",
     "customDatasources and the packageRules that use them: the libraries and tools that Freelens also has take the version Freelens has on main, not the newest release. See the packageRules for which ones. The custom datasources return one release, the version Freelens has, so those rules replace the current value rather than bump it: bump looks for the current version among the releases and skips a dependency with no lock file that it cannot find there."
   ],
-  "extends": ["config:recommended", ":semanticCommitsDisabled"],
+  "extends": ["github>jkroepke/renovate-config", ":semanticCommitsDisabled"],
   "prHourlyLimit": 20,
   "addLabels": ["renovate"],
   "osvVulnerabilityAlerts": true,
