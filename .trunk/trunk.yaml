@@ -110,7 +110,7 @@ lint:
           run_from: ${root_or_parent_with(biome.jsonc)}
       run_timeout: 1m
   enabled:
-    - actionlint@1.17.0
+    - actionlint@1.17.1
     - biome@2.6.4! # datasource=npm depName=@biomejs/biome
     - git-diff-check
     - shellcheck@0.11.0
