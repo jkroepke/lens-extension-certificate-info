@@ -41,9 +41,9 @@ jobs:
       # yq comes from mise so that its version has a single source (mise.toml)
       # and the download is verified against mise.lock.
       - name: Set up mise
-        uses: jdx/mise-action@6be3c7ed4c21d4f76b208d351d95aac273ebb76d # v5.2.4
+        uses: jdx/mise-action@f5be966e4a917d54244728e6a5fdcd1d93a35e6c # v5.2.6
         with:
-          version: 2026.10.25 # datasource=github-releases depName=jdx/mise
+          version: 2026.11.2 # datasource=github-releases depName=jdx/mise
           install_args: yq
 
       - name: Setup node
@@ -254,7 +254,7 @@ jobs:
           key: ${{ steps.binaries-cache-restore.outputs.cache-primary-key }}
 
       - name: Start KinD cluster
-        uses: helm/kind-action@1544676c07bb3570fcb70166beaa07c4528fd4aa # v1.15.1
+        uses: helm/kind-action@ea822c7bf1874f08e5a491df991c228edffc3376 # v1.15.2
         with:
           cluster_name: freelens
           version: v${{ env.kind_version }}
