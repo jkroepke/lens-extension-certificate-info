@@ -25,7 +25,7 @@
     "registry": "https://registry.npmjs.org/"
   },
   "scripts": {
-    "biome": "pnpm dlx @biomejs/biome@2.6.4",
+    "biome": "pnpm dlx @biomejs/biome@2.6.6",
     "biome:check": "pnpm biome check",
     "biome:fix": "pnpm biome check --fix",
     "biome:migrate": "pnpm biome migrate --write",
@@ -37,7 +37,7 @@
     "lint": "pnpm lint:check",
     "lint:check": "pnpm biome:check",
     "lint:fix": "pnpm biome:fix",
-    "knip": "pnpm dlx knip@6.41.0 --dependencies --files --no-gitignore --no-config-hints",
+    "knip": "pnpm dlx knip@6.45.1 --dependencies --files --no-gitignore --no-config-hints",
     "knip:check": "pnpm \"/^knip:(development|production)\\$/\"",
     "knip:development": "pnpm knip",
     "knip:production": "pnpm knip --production --strict",
@@ -85,7 +85,7 @@
     "react-dom": "19.3.1",
     "sass-embedded": "1.105.2",
     "typescript": "7.0.2",
-    "vite": "8.3.5",
+    "vite": "8.3.8",
     "vitest": "5.0.5"
   },
   "license": "Apache-2.0",
