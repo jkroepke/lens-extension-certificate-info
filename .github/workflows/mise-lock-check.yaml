@@ -29,9 +29,9 @@ jobs:
       # checksums. It covers the runner platform only; the diff check below
       # covers the rest. It also puts the pinned yq on PATH for that check.
       - name: Install tools from mise.lock
-        uses: jdx/mise-action@f5be966e4a917d54244728e6a5fdcd1d93a35e6c # v5.2.6
+        uses: jdx/mise-action@b44d12e7d0d8ee7461bb893e1b1993500433185b # v5.2.7
         with:
-          version: 2026.11.2 # datasource=github-releases depName=jdx/mise
+          version: 2026.11.3 # datasource=github-releases depName=jdx/mise
 
       # Lock file maintenance PRs are automerged and nobody reads their diff,
       # so the one thing a human could have spotted there is checked here: a
